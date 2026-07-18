@@ -16,6 +16,15 @@ func _ready() -> void:
 	_player.volume_db = -8.0
 	add_child(_player)
 	_player.finished.connect(_on_track_finished)
+	if Settings != null:
+		set_music_volume(Settings.music_volume)
+
+
+func set_music_volume(linear: float) -> void:
+	if _player == null:
+		return
+	var v := clampf(linear, 0.0, 1.0)
+	_player.volume_db = linear_to_db(v) if v > 0.001 else -80.0
 
 
 func play_intro(restart: bool = false) -> void:
