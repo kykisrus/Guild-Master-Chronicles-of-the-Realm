@@ -68,34 +68,55 @@ func set_state(s: State) -> void:
 
 
 func _play_idle(spr: AnimatedSprite2D) -> void:
-	var facing_anim := "idle_%s" % _facing
-	if spr.sprite_frames.has_animation(facing_anim):
-		spr.play(facing_anim)
+	spr.flip_h = _facing in ["w", "sw", "nw"]
+	var anim := _idle_anim_for_facing()
+	if spr.sprite_frames.has_animation(anim):
+		spr.play(anim)
+	elif spr.sprite_frames.has_animation(&"idle_se"):
+		spr.play(&"idle_se")
 	elif spr.sprite_frames.has_animation(&"idle"):
 		spr.play(&"idle")
 
 
 func _play_walk(spr: AnimatedSprite2D) -> void:
-	var facing_anim := "walk_%s" % _facing
-	if spr.sprite_frames.has_animation(facing_anim):
-		spr.play(facing_anim)
-	elif spr.sprite_frames.has_animation(&"run"):
+	# Generated 8-dir walk columns are unreliable; prefer authored SE cycle + flip.
+	spr.flip_h = _facing in ["w", "sw", "nw"]
+	if _facing in ["n", "ne", "nw"]:
+		if spr.sprite_frames.has_animation(&"walk_n"):
+			spr.play(&"walk_n")
+			return
+		if spr.sprite_frames.has_animation(&"idle_n"):
+			spr.play(&"idle_n")
+			return
+	if spr.sprite_frames.has_animation(&"run"):
 		spr.play(&"run")
+	elif spr.sprite_frames.has_animation(&"walk_se"):
+		spr.play(&"walk_se")
 	elif spr.sprite_frames.has_animation(&"walk"):
 		spr.play(&"walk")
 	elif spr.sprite_frames.has_animation(&"idle"):
 		spr.play(&"idle")
 
 
+func _idle_anim_for_facing() -> StringName:
+	match _facing:
+		"n", "ne", "nw":
+			return &"idle_n"
+		"e", "se", "s":
+			return &"idle_se"
+		"w", "sw":
+			return &"idle_se" # flipped in _play_idle via flip when walking; keep se for idle west
+		_:
+			return &"idle_se"
+
+
 func _facing_from_delta(delta: Vector2) -> String:
 	if delta.length_squared() < 0.01:
 		return _facing
-	var ang := atan2(delta.y, delta.x) # -PI..PI, 0 = east
-	# Map to 8 directions (screen y grows down).
+	var ang := atan2(delta.y, delta.x)
 	var deg := rad_to_deg(ang)
 	if deg < 0.0:
 		deg += 360.0
-	# 0 E, 45 SE, 90 S, 135 SW, 180 W, 225 NW, 270 N, 315 NE
 	var idx := int(floor((deg + 22.5) / 45.0)) % 8
 	var names := ["e", "se", "s", "sw", "w", "nw", "n", "ne"]
 	return names[idx]

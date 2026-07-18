@@ -69,6 +69,7 @@ gm_registration.title,Регистрация Гильдмастера
 gm_registration.subtitle,Представьтесь королевству
 gm_registration.name,Имя
 gm_registration.class,Класс
+gm_registration.role,Гильдмастер
 gm_registration.class.warrior,Воин
 gm_registration.class.archer,Лучник
 gm_registration.class.lancer,Копьеносец

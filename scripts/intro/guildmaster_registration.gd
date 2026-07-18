@@ -1,14 +1,10 @@
 extends Control
-## Guildmaster registration with live Tiny Swords class preview.
+## Guildmaster registration: name only; preview is always the guildmaster.
 
 const NEXT_SCENE := "res://scenes/intro/guild_creation.tscn"
-
-const CLASSES := [
-	{"id": "warrior", "key": "gm_registration.class.warrior"},
-	{"id": "archer", "key": "gm_registration.class.archer"},
-	{"id": "lancer", "key": "gm_registration.class.lancer"},
-	{"id": "monk", "key": "gm_registration.class.monk"},
-]
+const GM_FRAMES := "res://resources/sprite_frames/characters/guildmaster.tres"
+const GM_CLASS_ID := "guildmaster"
+const GM_CLASS_KEY := "gm_registration.role"
 
 @onready var title: Label = %Title
 @onready var subtitle: Label = %Subtitle
@@ -32,18 +28,14 @@ func _ready() -> void:
 	title.text = tr("gm_registration.title")
 	subtitle.text = tr("gm_registration.subtitle")
 	lbl_name.text = tr("gm_registration.name")
-	lbl_class.text = tr("gm_registration.class")
+	lbl_class.visible = false
+	class_opt.visible = false
 	btn_confirm.text = tr("menu.confirm")
 	error_label.text = ""
 	name_edit.max_length = 24
 	name_edit.placeholder_text = ""
-	class_opt.clear()
-	for c in CLASSES:
-		class_opt.add_item(tr(str(c["key"])))
-	class_opt.select(0)
-	class_opt.item_selected.connect(_on_class_selected)
 	btn_confirm.pressed.connect(_on_confirm)
-	_refresh_preview(0)
+	_refresh_preview()
 	preview_host.resized.connect(_center_preview)
 	call_deferred("_center_preview")
 	call_deferred("_focus_name")
@@ -67,7 +59,7 @@ func _focus_name() -> void:
 func _center_preview() -> void:
 	if preview_host == null or preview == null:
 		return
-	preview.position = preview_host.size * 0.5 + Vector2(0, 24)
+	preview.position = preview_host.size * 0.5 + Vector2(0, 36)
 
 
 func _style_preview_frame() -> void:
@@ -83,23 +75,20 @@ func _style_preview_frame() -> void:
 	preview_frame.add_theme_stylebox_override("panel", box)
 
 
-func _on_class_selected(index: int) -> void:
-	_refresh_preview(index)
-
-
-func _refresh_preview(index: int) -> void:
-	if index < 0 or index >= CLASSES.size():
-		return
-	var class_id := str(CLASSES[index]["id"])
-	preview_label.text = tr(str(CLASSES[index]["key"]))
-	var path := "res://resources/sprite_frames/tiny_swords/unit_%s_blue.tres" % class_id
+func _refresh_preview() -> void:
+	preview_label.text = tr(GM_CLASS_KEY)
+	preview.scale = Vector2(1.0, 1.0)
+	preview.offset = Vector2(0, -64)
+	var path := GM_FRAMES
 	if not ResourceLoader.exists(path):
 		path = "res://resources/sprite_frames/tiny_swords/unit_warrior_blue.tres"
 	var frames := load(path) as SpriteFrames
 	if frames == null:
 		return
 	preview.sprite_frames = frames
-	if frames.has_animation(&"idle"):
+	if frames.has_animation(&"idle_se"):
+		preview.play(&"idle_se")
+	elif frames.has_animation(&"idle"):
 		preview.play(&"idle")
 	elif frames.has_animation(&"run"):
 		preview.play(&"run")
@@ -113,17 +102,12 @@ func _on_confirm() -> void:
 	if hero_name.length() > 24:
 		error_label.text = tr("gm_registration.error_length")
 		return
-	if class_opt.selected < 0 or class_opt.selected >= CLASSES.size():
-		error_label.text = tr("gm_registration.error_class")
-		return
-	var class_data: Dictionary = CLASSES[class_opt.selected]
-	var class_id := str(class_data["id"])
 	CampaignState.set_pending_guildmaster({
 		"name": hero_name,
 		"first_name": hero_name,
 		"last_name": "",
-		"class_id": class_id,
-		"class_name": tr(str(class_data["key"])),
+		"class_id": GM_CLASS_ID,
+		"class_name": tr(GM_CLASS_KEY),
 		"gender": "male",
 	})
 	await SceneTransition.change_scene(NEXT_SCENE)

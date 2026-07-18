@@ -35,8 +35,8 @@ func _run() -> void:
 		"name": "Иван",
 		"first_name": "Иван",
 		"last_name": "",
-		"class_id": "warrior",
-		"class_name": "Воин",
+		"class_id": "guildmaster",
+		"class_name": "Гильдмастер",
 		"gender": "male",
 	})
 	campaign.set_pending_guild("Дымовая Застава", "blue")

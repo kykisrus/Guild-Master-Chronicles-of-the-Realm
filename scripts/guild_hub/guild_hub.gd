@@ -84,7 +84,7 @@ func _spawn_gm() -> void:
 	_gm = (load(GM_SCENE) as PackedScene).instantiate()
 	_gm.position = Vector2(1380, 800)
 	chars.add_child(_gm)
-	var class_id := str(CampaignState.guildmaster.get("class_id", "warrior"))
+	var class_id := str(CampaignState.guildmaster.get("class_id", "guildmaster"))
 	if _gm.has_method("set_unit_frames"):
 		_gm.set_unit_frames(class_id, CampaignState.guild_palette())
 	elif _gm.has_method("set_palette_frames"):
