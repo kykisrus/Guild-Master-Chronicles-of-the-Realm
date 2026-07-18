@@ -98,20 +98,20 @@ static func _apply_meta_to_stylebox(
 		# Keep full strip height; only slice left/right so wood doesn't get crushed bands.
 		mt = 0
 		mb = 0
-		if max_tex_margin > 0:
-			var need_h := float(maxi(ml, mr))
-			if need_h > float(max_tex_margin):
-				var scale := float(max_tex_margin) / need_h
-				tex = _scale_texture(tex, scale)
-				ml = maxi(1, int(round(float(ml) * scale)))
-				mr = maxi(1, int(round(float(mr) * scale)))
-		# Fit typical LineEdit / thin bar height without vertical seams.
-		var th := tex.get_height()
-		if th > 32:
-			var vscale := 32.0 / float(th)
+		# Fit height first, then cap side margins (order matters).
+		var th := float(tex.get_height())
+		if th > 32.0:
+			var vscale := 32.0 / th
 			tex = _scale_texture(tex, vscale)
 			ml = maxi(1, int(round(float(ml) * vscale)))
 			mr = maxi(1, int(round(float(mr) * vscale)))
+		if max_tex_margin > 0:
+			var need_h := float(maxi(ml, mr))
+			if need_h > float(max_tex_margin):
+				var hscale := float(max_tex_margin) / need_h
+				tex = _scale_texture(tex, hscale)
+				ml = maxi(1, int(round(float(ml) * hscale)))
+				mr = maxi(1, int(round(float(mr) * hscale)))
 	elif max_tex_margin > 0:
 		var need := float(maxi(maxi(ml, mr), maxi(mt, mb)))
 		if need > float(max_tex_margin):
