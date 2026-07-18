@@ -12,8 +12,8 @@ func _run() -> void:
 	for path in [
 		"res://resources/sprite_frames/characters/guildmaster.tres",
 		"res://resources/sprite_frames/characters/pronyra.tres",
-		"res://assets/characters/guildmaster/portraits/neutral.png",
-		"res://assets/characters/pronyra/portraits/neutral.png",
+		"res://assets/characters/guildmaster/portraits/dialogue.png",
+		"res://assets/characters/pronyra/portraits/dialogue.png",
 		"res://scenes/characters/guildmaster.tscn",
 	]:
 		assert(ResourceLoader.exists(path), "Missing %s" % path)
