@@ -1,0 +1,63 @@
+{
+  "speakers": {
+    "gm": "Гильдмастер",
+    "thief": "Проныра"
+  },
+  "opening": [
+    { "speaker": "gm", "text_key": "intro.gm_castle_line" },
+    { "speaker": "thief", "text_key": "intro.thief_first_line" },
+    { "speaker": "gm", "text_key": "intro.gm_who_are_you" },
+    { "speaker": "thief", "text_key": "intro.thief_caretaker" },
+    { "speaker": "gm", "text_key": "intro.gm_anything_left" },
+    { "speaker": "thief", "text_key": "intro.thief_almost_nothing" },
+    { "speaker": "thief", "text_key": "intro.thief_explain_cycle" }
+  ],
+  "questions": [
+    {
+      "id": "hire_heroes",
+      "text_key": "intro.question.hire_heroes",
+      "answer_key": "intro.answer.hire_heroes"
+    },
+    {
+      "id": "quests",
+      "text_key": "intro.question.quests",
+      "answer_key": "intro.answer.quests"
+    },
+    {
+      "id": "staff",
+      "text_key": "intro.question.staff",
+      "answer_key": "intro.answer.staff"
+    },
+    {
+      "id": "guild_growth",
+      "text_key": "intro.question.guild_growth",
+      "answer_key": "intro.answer.guild_growth"
+    },
+    {
+      "id": "failure",
+      "text_key": "intro.question.failure",
+      "answer_key": "intro.answer.failure"
+    },
+    {
+      "id": "world",
+      "text_key": "intro.question.world",
+      "answer_key": "intro.answer.world"
+    },
+    {
+      "id": "ready",
+      "text_key": "intro.question.ready",
+      "answer_key": ""
+    }
+  ],
+  "ready_prompt": {
+    "speaker": "thief",
+    "text_key": "intro.ready_prompt",
+    "choices": [
+      { "id": "more", "text_key": "intro.choice.more_questions" },
+      { "id": "ready", "text_key": "intro.question.ready" }
+    ]
+  },
+  "farewell": [
+    { "speaker": "thief", "text_key": "intro.thief_farewell" }
+  ]
+}
