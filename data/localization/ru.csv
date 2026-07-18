@@ -14,10 +14,7 @@ menu.not_available,Недоступно
 menu.ok,Понятно
 menu.new_game_popup,"Создание новой гильдии будет доступно после подключения следующего этапа."
 menu.load_campaign_popup,"Загрузка кампании станет доступна после подключения игрового экрана."
-menu.skip_splash,"Нажмите любую клавишу, чтобы пропустить"
-splash.godot,СОЗДАНО НА GODOT ENGINE
-splash.ams,ИГРА ОТ AMS
-splash.game,ХРОНИКИ НАЧИНАЮТСЯ
+menu.skip_splash,Пропустить
 save.slot,Слот %d
 save.empty,Пусто
 save.available,Сохранение доступно
