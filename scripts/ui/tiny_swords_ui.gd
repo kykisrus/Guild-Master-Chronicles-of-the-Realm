@@ -98,20 +98,16 @@ static func _apply_meta_to_stylebox(
 		# Keep full strip height; only slice left/right so wood doesn't get crushed bands.
 		mt = 0
 		mb = 0
-		# Fit height first, then cap side margins (order matters).
 		var th := float(tex.get_height())
 		if th > 32.0:
 			var vscale := 32.0 / th
 			tex = _scale_texture(tex, vscale)
 			ml = maxi(1, int(round(float(ml) * vscale)))
 			mr = maxi(1, int(round(float(mr) * vscale)))
+		# Cap margins without shrinking the whole strip again (avoids 10px-tall mush).
 		if max_tex_margin > 0:
-			var need_h := float(maxi(ml, mr))
-			if need_h > float(max_tex_margin):
-				var hscale := float(max_tex_margin) / need_h
-				tex = _scale_texture(tex, hscale)
-				ml = maxi(1, int(round(float(ml) * hscale)))
-				mr = maxi(1, int(round(float(mr) * hscale)))
+			ml = mini(ml, max_tex_margin)
+			mr = mini(mr, max_tex_margin)
 	elif max_tex_margin > 0:
 		var need := float(maxi(maxi(ml, mr), maxi(mt, mb)))
 		if need > float(max_tex_margin):

@@ -24,6 +24,7 @@ func _run() -> void:
 	assert(bar.texture != null, "wood bar null")
 	assert(is_equal_approx(bar.texture_margin_top, 0.0), "bar must not 9-slice vertically")
 	assert(bar.texture_margin_left <= 12.0 + 0.5, "bar side margin capped")
+	assert(bar.texture.get_height() >= 24, "wood bar too short")
 	print("Wood bar OK h=", bar.texture.get_height(), " ml=", bar.texture_margin_left)
 
 	var btn_bake: ImageTexture = TinySwordsUi.bake_seamless_panel(TinySwordsUi.BTN_BLUE)
