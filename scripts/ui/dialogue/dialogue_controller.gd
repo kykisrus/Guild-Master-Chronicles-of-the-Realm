@@ -1,5 +1,5 @@
 extends CanvasLayer
-## Reusable dialogue UI built from Tiny Swords papers/buttons/avatars.
+## Dialogue UI: baked Tiny Swords panel + UI avatars (not world sprites).
 
 signal choice_selected(choice_id: String)
 signal dialogue_finished
@@ -12,7 +12,6 @@ signal dialogue_finished
 @onready var choices_box: VBoxContainer = %ChoicesBox
 @onready var continue_hint: Label = %ContinueHint
 
-var _full_text: String = ""
 var _typing := false
 var _type_tween: Tween
 var _awaiting_continue := false
@@ -23,31 +22,51 @@ func _ready() -> void:
 	visible = false
 	var root := get_node_or_null("Root") as Control
 	if root != null:
-		TinySwordsUi.apply_dialogue_theme(root)
-	panel.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.PAPER_SPECIAL, 8))
-	portrait_frame.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.WOOD_TABLE, 8))
-	continue_hint.text = tr("intro.dialogue_continue").replace("…", "")
+		root.theme = TinySwordsThemeFactory.build()
+	panel.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.PAPER_SPECIAL, 14))
+	var frame := StyleBoxFlat.new()
+	frame.bg_color = Color(0.08, 0.07, 0.06, 0.95)
+	frame.border_color = Color(0.85, 0.72, 0.32, 1.0)
+	frame.set_border_width_all(2)
+	frame.set_content_margin_all(6)
+	portrait_frame.add_theme_stylebox_override("panel", frame)
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	panel.gui_input.connect(_on_panel_gui_input)
+	continue_hint.text = tr("intro.dialogue_continue")
 	_portrait_by_speaker = {
 		"Проныра": TinySwordsUi.AVATAR_THIEF,
 		"Гильдмастер": TinySwordsUi.AVATAR_GM,
 	}
 
 
-func set_speaker_portrait(speaker: String, texture_path: String) -> void:
-	_portrait_by_speaker[speaker] = texture_path
+func is_open() -> bool:
+	return visible
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
 		return
-	if event.is_action_pressed("ui_accept") or (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT):
-		if _typing:
-			_reveal_all()
-			get_viewport().set_input_as_handled()
-		elif _awaiting_continue and choices_box.get_child_count() == 0:
-			_awaiting_continue = false
-			dialogue_finished.emit()
-			get_viewport().set_input_as_handled()
+	if event.is_action_pressed("ui_accept"):
+		_handle_advance()
+		get_viewport().set_input_as_handled()
+
+
+func _on_panel_gui_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
+			_handle_advance()
+			panel.accept_event()
+
+
+func _handle_advance() -> void:
+	if _typing:
+		_reveal_all()
+	elif _awaiting_continue and choices_box.get_child_count() == 0:
+		_awaiting_continue = false
+		dialogue_finished.emit()
 
 
 func show_line(speaker: String, text: String, typewriter := true) -> void:
@@ -55,19 +74,18 @@ func show_line(speaker: String, text: String, typewriter := true) -> void:
 	speaker_label.text = speaker
 	_apply_portrait(speaker)
 	_clear_choices()
-	_full_text = text
 	continue_hint.visible = true
 	if typewriter:
 		_start_typewriter(text)
 		_awaiting_continue = true
 	else:
 		body_label.text = text
+		body_label.visible_characters = -1
 		_typing = false
 		_awaiting_continue = true
 
 
 func show_choices(choices: Array) -> void:
-	## choices: Array of { "id": String, "text": String, "seen": bool }
 	visible = true
 	_clear_choices()
 	continue_hint.visible = false
@@ -77,11 +95,10 @@ func show_choices(choices: Array) -> void:
 		if typeof(c) != TYPE_DICTIONARY:
 			continue
 		var btn := Button.new()
-		var label := str(c.get("text", ""))
 		var seen := bool(c.get("seen", false))
+		btn.text = str(c.get("text", ""))
 		if seen:
 			btn.modulate = Color(0.78, 0.82, 0.75, 1.0)
-		btn.text = label
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var cid := str(c.get("id", ""))
 		btn.pressed.connect(func() -> void: choice_selected.emit(cid))

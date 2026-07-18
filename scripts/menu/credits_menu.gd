@@ -9,7 +9,7 @@ const CREDITS_MD := "res://docs/credits/THIRD_PARTY_CREDITS.md"
 
 
 func _ready() -> void:
-	theme = TinyThemeFactory.build()
+	theme = TinySwordsThemeFactory.build()
 	MusicController.enter_menu_context()
 	title_label.text = tr("credits.title")
 	btn_back.text = tr("menu.back")

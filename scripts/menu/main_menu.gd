@@ -16,7 +16,7 @@ var _info: AcceptDialog
 
 
 func _ready() -> void:
-	theme = TinyThemeFactory.build()
+	theme = TinySwordsThemeFactory.build()
 	MusicController.enter_menu_context()
 	_refresh_texts()
 	btn_new.pressed.connect(_on_new)
@@ -38,6 +38,7 @@ func _refresh_texts() -> void:
 
 func _on_new() -> void:
 	MusicController.leave_menu_context()
+	CampaignState.reset()
 	get_tree().change_scene_to_file(INTRO_SCENE)
 
 

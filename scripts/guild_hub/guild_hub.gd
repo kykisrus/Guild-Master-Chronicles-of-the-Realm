@@ -18,6 +18,10 @@ const GM_SCENE := "res://scenes/characters/guildmaster.tscn"
 var _gm: Node2D
 var _info: AcceptDialog
 var _patrol_points: Array[Vector2] = []
+var _barracks: Sprite2D
+var _barracks_click: ClickableTarget
+var _busy := false
+var _theme: Theme
 
 
 func _ready() -> void:
@@ -42,14 +46,22 @@ func _place_buildings() -> void:
 	var path := "res://assets/tiny_swords/buildings/%s/Barracks.png" % palette
 	if not ResourceLoader.exists(path):
 		path = "res://assets/tiny_swords/buildings/blue/Barracks.png"
-	var spr := Sprite2D.new()
-	spr.name = "Barracks"
-	spr.texture = load(path) as Texture2D
-	spr.centered = true
-	spr.position = Vector2(1450, 720)
-	if spr.texture:
-		spr.offset = Vector2(0, -spr.texture.get_height() * 0.5)
-	buildings.add_child(spr)
+	_barracks = Sprite2D.new()
+	_barracks.name = "Barracks"
+	_barracks.texture = load(path) as Texture2D
+	_barracks.centered = true
+	_barracks.position = Vector2(1450, 720)
+	if _barracks.texture:
+		_barracks.offset = Vector2(0, -_barracks.texture.get_height() * 0.5)
+	buildings.add_child(_barracks)
+
+	var tw := _barracks.texture.get_width() if _barracks.texture else 160
+	var th := _barracks.texture.get_height() if _barracks.texture else 160
+	_barracks_click = ClickableTarget.new()
+	_barracks_click.name = "BarracksClick"
+	_barracks.add_child(_barracks_click)
+	_barracks_click.setup(_barracks, Vector2(tw, th), Vector2(0, -th * 0.5))
+	_barracks_click.clicked.connect(_on_barracks_clicked)
 
 	var reception := Marker2D.new()
 	reception.name = "ReceptionSpot"
@@ -80,12 +92,13 @@ func _spawn_gm() -> void:
 
 
 func _setup_ui() -> void:
-	var theme := TinyThemeFactory.build()
+	_theme = TinySwordsThemeFactory.build()
 	var ui_root := get_node_or_null("UI/Root") as Control
 	if ui_root != null:
-		ui_root.theme = theme
-	top_bar.theme = theme
-	bottom_nav.theme = theme
+		ui_root.theme = _theme
+	top_bar.theme = _theme
+	top_bar.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.WOOD_TABLE, 12))
+	bottom_nav.theme = _theme
 	guild_title.text = CampaignState.guild_display_name()
 	resources_label.text = tr("hub.resources_stub") % [0, 0, 0, 0, 0]
 	var day := int(CampaignState.time.get("day", 1))
@@ -128,6 +141,19 @@ func _on_nav_stub() -> void:
 	_popup(tr("hub.section"), tr("hub.section_later"))
 
 
+func _on_barracks_clicked() -> void:
+	if _busy or _gm == null:
+		return
+	_busy = true
+	if _barracks_click != null:
+		_barracks_click.set_click_enabled(false)
+	await _gm.walk_to(Vector2(1450, 780))
+	_popup(tr("hub.barracks"), tr("hub.barracks_later"))
+	_busy = false
+	if _barracks_click != null:
+		_barracks_click.set_click_enabled(true)
+
+
 func _on_exit_to_menu() -> void:
 	get_tree().change_scene_to_file("res://scenes/menu/main_menu.tscn")
 
@@ -135,7 +161,7 @@ func _on_exit_to_menu() -> void:
 func _popup(title_text: String, body: String) -> void:
 	if _info == null:
 		_info = AcceptDialog.new()
-		_info.theme = TinyThemeFactory.build()
+		_info.theme = _theme if _theme != null else TinySwordsThemeFactory.build()
 		add_child(_info)
 	_info.title = title_text
 	_info.dialog_text = body
@@ -147,8 +173,13 @@ func _patrol_loop() -> void:
 	if _gm == null or _patrol_points.is_empty():
 		return
 	while is_instance_valid(_gm):
+		if _busy:
+			await get_tree().create_timer(0.4).timeout
+			continue
 		for p in _patrol_points:
 			if not is_instance_valid(_gm):
 				return
+			if _busy:
+				break
 			await _gm.walk_to(p)
 			await get_tree().create_timer(1.2).timeout

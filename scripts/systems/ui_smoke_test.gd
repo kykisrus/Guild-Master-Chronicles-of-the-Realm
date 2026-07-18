@@ -27,6 +27,10 @@ func _run() -> void:
 		"res://scenes/menu/load_menu.tscn",
 		"res://scenes/menu/settings_menu.tscn",
 		"res://scenes/menu/credits_menu.tscn",
+		"res://scenes/ui/dialogue/dialogue_box.tscn",
+		"res://scenes/intro/guildmaster_registration.tscn",
+		"res://scenes/intro/guild_creation.tscn",
+		"res://scenes/intro/intro_field.tscn",
 	]:
 		err = change_scene_to_file(scene_path)
 		assert(err == OK, "Failed to load %s" % scene_path)
@@ -47,12 +51,24 @@ func _run() -> void:
 	var del_err: String = sl.delete_save(99)
 	assert(del_err != "", "Invalid slot should error")
 
-	# Theme factory
-	var theme: Theme = TinyThemeFactory.build()
-	assert(theme != null, "Theme null")
-	assert(theme.default_font != null, "Font missing in theme")
-	print("Theme font OK: ", theme.default_font)
-	print("RU sample: Новая игра ОП Ёё")
+	# Legacy settings theme still works
+	var tiny_theme: Theme = TinyThemeFactory.build()
+	assert(tiny_theme != null, "TinyTheme null")
+	assert(tiny_theme.default_font != null, "Font missing in TinyTheme")
+	print("TinyTheme font OK")
+
+	# Tiny Swords bake + theme
+	var baked: ImageTexture = TinySwordsUi.bake_seamless_panel(TinySwordsUi.PAPER_SPECIAL)
+	assert(baked != null, "bake_seamless_panel returned null")
+	assert(baked.get_width() >= 24, "baked panel too small")
+	print("Bake OK: ", baked.get_width(), "x", baked.get_height())
+
+	var swords_theme: Theme = TinySwordsThemeFactory.build()
+	assert(swords_theme != null, "TinySwordsTheme null")
+	assert(swords_theme.default_font != null, "Font missing in TinySwordsTheme")
+	var panel_sb := swords_theme.get_stylebox("panel", "PanelContainer")
+	assert(panel_sb is StyleBoxTexture, "Panel style should be StyleBoxTexture")
+	print("TinySwordsTheme OK")
 
 	print("=== UI SMOKE TEST PASS ===")
 	quit(0)

@@ -14,13 +14,18 @@ const PALETTES := ["blue", "red", "black", "yellow", "purple"]
 @onready var lbl_name: Label = %LblName
 @onready var lbl_palette: Label = %LblPalette
 @onready var palette_name: Label = %PaletteName
+@onready var panel: PanelContainer = $Center/Panel
 
 var _palette: String = "blue"
 var _confirm: ConfirmationDialog
 
 
 func _ready() -> void:
-	theme = TinyThemeFactory.build()
+	theme = TinySwordsThemeFactory.build()
+	panel.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.PAPER_SPECIAL, 18))
+	btn_found.add_theme_stylebox_override("normal", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 14))
+	btn_found.add_theme_stylebox_override("hover", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 14))
+	btn_found.add_theme_stylebox_override("pressed", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE_PRESSED, 14))
 	title.text = tr("guild_creation.title")
 	lbl_name.text = tr("guild_creation.name")
 	lbl_palette.text = tr("guild_creation.palette")
@@ -85,7 +90,6 @@ func _on_found_pressed() -> void:
 	_confirm.ok_button_text = tr("guild_creation.found")
 	_confirm.get_cancel_button().text = tr("menu.back")
 	_confirm.popup_centered()
-	# stash name
 	CampaignState.set_pending_guild(gname, _palette)
 
 

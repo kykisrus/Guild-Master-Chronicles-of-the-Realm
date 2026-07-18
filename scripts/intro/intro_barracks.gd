@@ -1,6 +1,7 @@
 extends Node2D
-## Kings and Pigs interior + thief dialogue flow.
+## Kings and Pigs interior + thief dialogue; door click returns to field.
 
+const FIELD_SCENE := "res://scenes/intro/intro_field.tscn"
 const REG_SCENE := "res://scenes/intro/guildmaster_registration.tscn"
 const GM_SCENE := "res://scenes/characters/guildmaster.tscn"
 const DOOR_SCENE := "res://scenes/assets/kings_and_pigs/basic_door.tscn"
@@ -18,6 +19,7 @@ const ROOM_H := 540.0
 var _gm: Node2D
 var _thief: AnimatedSprite2D
 var _door: Node2D
+var _door_click: ClickableTarget
 var _dialogue: CanvasLayer
 var _data: Dictionary = {}
 var _seen: Dictionary = {}
@@ -25,6 +27,7 @@ var _phase: String = "opening"
 var _line_i := 0
 var _skip_confirm: ConfirmationDialog
 var _waiting_line := false
+var _busy := false
 
 
 func _ready() -> void:
@@ -34,11 +37,13 @@ func _ready() -> void:
 	add_child(_dialogue)
 	_dialogue.choice_selected.connect(_on_choice)
 	_dialogue.dialogue_finished.connect(_on_line_finished)
+	skip_btn.theme = TinySwordsThemeFactory.build()
 	skip_btn.text = tr("intro.skip")
 	skip_btn.pressed.connect(_on_skip_pressed)
 	camera.position = Vector2(ROOM_W * 0.5, ROOM_H * 0.5)
 	camera.make_current()
 	await get_tree().process_frame
+	_refresh_door_click()
 	_start_opening()
 
 
@@ -56,6 +61,12 @@ func _build_room() -> void:
 	_door.position = Vector2(120, 280)
 	world.add_child(_door)
 
+	_door_click = ClickableTarget.new()
+	_door_click.name = "DoorClick"
+	_door.add_child(_door_click)
+	_door_click.setup(_door, Vector2(80, 120), Vector2(0, -20))
+	_door_click.clicked.connect(_on_door_clicked)
+
 	_gm = (load(GM_SCENE) as PackedScene).instantiate()
 	_gm.position = Vector2(220, 360)
 	world.add_child(_gm)
@@ -72,7 +83,6 @@ func _build_room() -> void:
 			_thief.play(&"run")
 	_thief.position = Vector2(620, 360)
 	_thief.flip_h = true
-	# Same pack/scale family as Guildmaster (Tiny Swords).
 	_thief.scale = Vector2(1.0, 1.0)
 	world.add_child(_thief)
 
@@ -107,6 +117,7 @@ func _show_next_opening() -> void:
 	_line_i += 1
 	_waiting_line = true
 	_dialogue.show_line(_speaker_name(str(line.get("speaker", ""))), tr(str(line.get("text_key", ""))))
+	_refresh_door_click()
 
 
 func _show_question_menu() -> void:
@@ -124,6 +135,7 @@ func _show_question_menu() -> void:
 	_dialogue.speaker_label.text = _speaker_name("thief")
 	_dialogue.body_label.text = tr("intro.ask_me")
 	_dialogue.show_choices(choices)
+	_refresh_door_click()
 
 
 func _on_line_finished() -> void:
@@ -141,6 +153,7 @@ func _on_line_finished() -> void:
 			_after_farewell()
 		_:
 			pass
+	_refresh_door_click()
 
 
 func _on_choice(choice_id: String) -> void:
@@ -155,7 +168,6 @@ func _on_choice(choice_id: String) -> void:
 		_show_ready_prompt()
 		return
 
-	# Answer a question
 	for q in _data.get("questions", []):
 		if typeof(q) != TYPE_DICTIONARY:
 			continue
@@ -165,6 +177,7 @@ func _on_choice(choice_id: String) -> void:
 		_phase = "answer"
 		_waiting_line = true
 		_dialogue.show_line(_speaker_name("thief"), tr(str(q.get("answer_key", ""))))
+		_refresh_door_click()
 		return
 
 
@@ -173,6 +186,7 @@ func _show_ready_prompt() -> void:
 	var prompt: Dictionary = _data.get("ready_prompt", {})
 	_waiting_line = true
 	_dialogue.show_line(_speaker_name(str(prompt.get("speaker", "thief"))), tr(str(prompt.get("text_key", "intro.ready_prompt"))))
+	_refresh_door_click()
 
 
 func _show_ready_choices() -> void:
@@ -188,6 +202,7 @@ func _show_ready_choices() -> void:
 			"seen": false,
 		})
 	_dialogue.show_choices(choices)
+	_refresh_door_click()
 
 
 func _begin_farewell() -> void:
@@ -205,11 +220,13 @@ func _show_farewell_line() -> void:
 	_line_i += 1
 	_waiting_line = true
 	_dialogue.show_line(_speaker_name(str(line.get("speaker", "thief"))), tr(str(line.get("text_key", ""))))
+	_refresh_door_click()
 
 
 func _after_farewell() -> void:
+	_busy = true
+	_refresh_door_click()
 	_dialogue.hide_dialogue()
-	# Thief walks to door and leaves (visual only on stage 3 intro before registration)
 	if _thief != null:
 		var tw := create_tween()
 		tw.tween_property(_thief, "position", Vector2(140, 300), 1.2)
@@ -221,10 +238,36 @@ func _after_farewell() -> void:
 	await SceneTransition.change_scene(REG_SCENE)
 
 
+func _door_nav_allowed() -> bool:
+	if _busy or _waiting_line:
+		return false
+	# Allow leaving to field during choice menus (before «Я готов»).
+	return _phase == "questions" or _phase == "ready_choices"
+
+
+func _refresh_door_click() -> void:
+	if _door_click != null:
+		_door_click.set_click_enabled(_door_nav_allowed())
+
+
+func _on_door_clicked() -> void:
+	if not _door_nav_allowed() or _gm == null:
+		return
+	_busy = true
+	_refresh_door_click()
+	if _dialogue != null:
+		_dialogue.hide_dialogue()
+	await _gm.walk_to(Vector2(140, 300))
+	if _door != null and _door.has_method("open_door"):
+		_door.open_door()
+		await get_tree().create_timer(0.35).timeout
+	await SceneTransition.change_scene(FIELD_SCENE)
+
+
 func _on_skip_pressed() -> void:
 	if _skip_confirm == null:
 		_skip_confirm = ConfirmationDialog.new()
-		_skip_confirm.theme = TinyThemeFactory.build()
+		_skip_confirm.theme = TinySwordsThemeFactory.build()
 		add_child(_skip_confirm)
 		_skip_confirm.confirmed.connect(_do_skip)
 	_skip_confirm.title = tr("intro.skip")
@@ -235,4 +278,5 @@ func _on_skip_pressed() -> void:
 
 
 func _do_skip() -> void:
+	_busy = true
 	await SceneTransition.change_scene(REG_SCENE)

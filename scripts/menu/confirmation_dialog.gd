@@ -3,8 +3,7 @@ extends ConfirmationDialog
 
 
 func _ready() -> void:
-	theme = TinyThemeFactory.build()
-
+	theme = TinySwordsThemeFactory.build()
 
 func setup(title_text: String, body_text: String, ok_text: String = "", cancel_text: String = "") -> void:
 	title = title_text

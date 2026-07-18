@@ -26,7 +26,7 @@ const CLASSES := [
 
 
 func _ready() -> void:
-	theme = TinyThemeFactory.build()
+	theme = TinySwordsThemeFactory.build()
 	_apply_tiny_swords_card()
 	_style_preview_frame()
 	title.text = tr("gm_registration.title")
@@ -50,13 +50,7 @@ func _ready() -> void:
 
 
 func _apply_tiny_swords_card() -> void:
-	# Prefer Tiny Swords special paper as the card texture if NinePatch is used.
-	if card != null and ResourceLoader.exists(TinySwordsUi.PAPER_SPECIAL):
-		card.texture = load(TinySwordsUi.PAPER_SPECIAL) as Texture2D
-		card.patch_margin_left = 106
-		card.patch_margin_top = 106
-		card.patch_margin_right = 106
-		card.patch_margin_bottom = 106
+	TinySwordsUi.apply_nine_patch(card, TinySwordsUi.PAPER_SPECIAL)
 	btn_confirm.add_theme_stylebox_override("normal", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 14))
 	btn_confirm.add_theme_stylebox_override("hover", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 14))
 	btn_confirm.add_theme_stylebox_override("pressed", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE_PRESSED, 14))

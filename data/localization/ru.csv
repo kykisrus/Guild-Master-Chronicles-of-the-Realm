@@ -94,6 +94,8 @@ hub.end_day,Закончить день
 hub.later,Позже.
 hub.section,Раздел
 hub.section_later,Раздел будет доступен позже.
+hub.barracks,Казарма
+hub.barracks_later,Вход в казарму будет доступен позже.
 hub.nav.guild,Гильдия
 hub.nav.heroes,Герои
 hub.nav.parties,Отряды

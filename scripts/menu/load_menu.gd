@@ -14,7 +14,7 @@ var _pending_delete_slot: int = 0
 
 
 func _ready() -> void:
-	theme = TinyThemeFactory.build()
+	theme = TinySwordsThemeFactory.build()
 	MusicController.enter_menu_context()
 	title.text = tr("menu.load")
 	btn_back.text = tr("menu.back")
