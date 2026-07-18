@@ -1,49 +1,40 @@
 extends Node2D
-## Autonomous Guildmaster — no direct player movement control.
+## Autonomous Guildmaster — custom character art; no direct player movement.
 
 signal arrived
 signal interaction_finished
 
-const DEFAULT_FRAMES := "res://resources/sprite_frames/tiny_swords/unit_warrior_blue.tres"
+const CUSTOM_FRAMES := "res://resources/sprite_frames/characters/guildmaster.tres"
+const FALLBACK_FRAMES := "res://resources/sprite_frames/tiny_swords/unit_warrior_blue.tres"
 
 enum State { IDLE, WALKING, INTERACTING, ENTERING, TALKING }
 
 @export var move_speed: float = 110.0
-@export var sprite_frames_path: String = DEFAULT_FRAMES
+@export var sprite_frames_path: String = CUSTOM_FRAMES
 
 var sprite: AnimatedSprite2D
 
 var _state: State = State.IDLE
 var _tween: Tween
+var _facing: String = "se"
 
 
 func _ready() -> void:
 	sprite = %Sprite as AnimatedSprite2D
+	if not ResourceLoader.exists(sprite_frames_path):
+		sprite_frames_path = FALLBACK_FRAMES
 	_apply_frames(sprite_frames_path)
 	set_state(State.IDLE)
 
 
-func set_palette_frames(palette: String) -> void:
-	_apply_unit_frames("warrior", palette)
+func set_palette_frames(_palette: String) -> void:
+	# Custom guildmaster art is fixed; guild palette is data-only for now.
+	pass
 
 
-func set_unit_frames(class_id: String, palette: String) -> void:
-	_apply_unit_frames(class_id, palette)
-
-
-func _apply_unit_frames(class_id: String, palette: String) -> void:
-	var unit := class_id.to_lower()
-	if unit.is_empty():
-		unit = "warrior"
-	var p := palette.to_lower()
-	if p.is_empty():
-		p = "blue"
-	var path := "res://resources/sprite_frames/tiny_swords/unit_%s_%s.tres" % [unit, p]
-	if not ResourceLoader.exists(path):
-		path = "res://resources/sprite_frames/tiny_swords/unit_warrior_%s.tres" % p
-	if ResourceLoader.exists(path):
-		sprite_frames_path = path
-		_apply_frames(path)
+func set_unit_frames(_class_id: String, _palette: String) -> void:
+	# Class choice does not swap the guildmaster sprite (preview uses Tiny Swords).
+	pass
 
 
 func _ensure_sprite() -> AnimatedSprite2D:
@@ -66,23 +57,60 @@ func set_state(s: State) -> void:
 		return
 	match s:
 		State.IDLE, State.TALKING, State.INTERACTING:
-			if spr.sprite_frames.has_animation(&"idle"):
-				spr.play(&"idle")
-		State.WALKING, State.ENTERING:
-			if spr.sprite_frames.has_animation(&"run"):
-				spr.play(&"run")
-			elif spr.sprite_frames.has_animation(&"idle"):
-				spr.play(&"idle")
+			_play_idle(spr)
+		State.WALKING:
+			_play_walk(spr)
+		State.ENTERING:
+			if spr.sprite_frames.has_animation(&"enter"):
+				spr.play(&"enter")
+			else:
+				_play_walk(spr)
+
+
+func _play_idle(spr: AnimatedSprite2D) -> void:
+	var facing_anim := "idle_%s" % _facing
+	if spr.sprite_frames.has_animation(facing_anim):
+		spr.play(facing_anim)
+	elif spr.sprite_frames.has_animation(&"idle"):
+		spr.play(&"idle")
+
+
+func _play_walk(spr: AnimatedSprite2D) -> void:
+	var facing_anim := "walk_%s" % _facing
+	if spr.sprite_frames.has_animation(facing_anim):
+		spr.play(facing_anim)
+	elif spr.sprite_frames.has_animation(&"run"):
+		spr.play(&"run")
+	elif spr.sprite_frames.has_animation(&"walk"):
+		spr.play(&"walk")
+	elif spr.sprite_frames.has_animation(&"idle"):
+		spr.play(&"idle")
+
+
+func _facing_from_delta(delta: Vector2) -> String:
+	if delta.length_squared() < 0.01:
+		return _facing
+	var ang := atan2(delta.y, delta.x) # -PI..PI, 0 = east
+	# Map to 8 directions (screen y grows down).
+	var deg := rad_to_deg(ang)
+	if deg < 0.0:
+		deg += 360.0
+	# 0 E, 45 SE, 90 S, 135 SW, 180 W, 225 NW, 270 N, 315 NE
+	var idx := int(floor((deg + 22.5) / 45.0)) % 8
+	var names := ["e", "se", "s", "sw", "w", "nw", "n", "ne"]
+	return names[idx]
 
 
 func walk_to(global_target: Vector2) -> void:
 	if _tween != null and _tween.is_valid():
 		_tween.kill()
-	set_state(State.WALKING)
 	var delta := global_target - global_position
+	_facing = _facing_from_delta(delta)
 	var spr := _ensure_sprite()
 	if spr != null:
-		spr.flip_h = delta.x < 0.0
+		# Directional sheets include mirrored facings; avoid double-flip.
+		spr.flip_h = false
+	set_state(State.WALKING)
 	var dist := delta.length()
 	var dur := maxf(dist / move_speed, 0.05)
 	_tween = create_tween()
@@ -99,6 +127,12 @@ func walk_path(points: Array[Vector2]) -> void:
 
 func play_enter_building() -> void:
 	set_state(State.ENTERING)
-	await get_tree().create_timer(0.35).timeout
+	var spr := _ensure_sprite()
+	var wait := 0.45
+	if spr != null and spr.sprite_frames != null and spr.sprite_frames.has_animation(&"enter"):
+		var n := spr.sprite_frames.get_frame_count(&"enter")
+		var spd := spr.sprite_frames.get_animation_speed(&"enter")
+		wait = maxf(float(n) / maxf(spd, 1.0), 0.35)
+	await get_tree().create_timer(wait).timeout
 	set_state(State.IDLE)
 	interaction_finished.emit()

@@ -9,8 +9,10 @@ const BTN_BLUE := "res://assets/tiny_swords/ui/buttons/BigBlueButton_Regular.png
 const BTN_BLUE_PRESSED := "res://assets/tiny_swords/ui/buttons/BigBlueButton_Pressed.png"
 const BTN_SMALL := "res://assets/tiny_swords/ui/buttons/SmallBlueSquareButton_Regular.png"
 const BTN_SMALL_PRESSED := "res://assets/tiny_swords/ui/buttons/SmallBlueSquareButton_Pressed.png"
-const AVATAR_THIEF := "res://assets/tiny_swords/ui/avatars/Avatars_08.png"
-const AVATAR_GM := "res://assets/tiny_swords/ui/avatars/Avatars_01.png"
+const AVATAR_THIEF := "res://assets/characters/pronyra/portraits/neutral.png"
+const AVATAR_GM := "res://assets/characters/guildmaster/portraits/neutral.png"
+const AVATAR_THIEF_SPEAKING := "res://assets/characters/pronyra/portraits/speaking.png"
+const AVATAR_GM_SPEAKING := "res://assets/characters/guildmaster/portraits/speaking.png"
 
 ## Cap texture margins so short buttons (~40px) don't shred 9-slice.
 const DEFAULT_MAX_TEX_MARGIN := 14

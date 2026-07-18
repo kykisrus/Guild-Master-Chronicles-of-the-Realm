@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/characters/guildmaster.gd" id="1"]
-[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/tiny_swords/unit_warrior_blue.tres" id="2"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/characters/guildmaster.tres" id="2"]
 
 [node name="Guildmaster" type="Node2D"]
 y_sort_enabled = true
@@ -12,4 +12,4 @@ unique_name_in_owner = true
 sprite_frames = ExtResource("2")
 animation = &"idle"
 autoplay = "idle"
-offset = Vector2(0, -64)
+offset = Vector2(0, -96)
