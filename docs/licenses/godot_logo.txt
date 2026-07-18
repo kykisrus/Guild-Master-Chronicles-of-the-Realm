@@ -1,0 +1,4 @@
+Godot Engine logo
+Copyright (c) 2014-present Godot Engine contributors.
+License: CC-BY-4.0
+Source: https://godotengine.org/press/
