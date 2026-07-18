@@ -29,7 +29,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(520, 420)
+custom_minimum_size = Vector2(440, 280)
 layout_mode = 2
 
 [node name="Margin" type="MarginContainer" parent="Center/Panel"]
@@ -41,52 +41,45 @@ theme_override_constants/margin_bottom = 20
 
 [node name="VBox" type="VBoxContainer" parent="Center/Panel/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="Center/Panel/Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
-text = "Регистрационная форма"
+text = "Регистрация"
 horizontal_alignment = 1
 
-[node name="LblFirst" type="Label" parent="Center/Panel/Margin/VBox"]
+[node name="Row" type="HBoxContainer" parent="Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="NameCol" type="VBoxContainer" parent="Center/Panel/Margin/VBox/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="LblName" type="Label" parent="Center/Panel/Margin/VBox/Row/NameCol"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Имя"
 
-[node name="FirstName" type="LineEdit" parent="Center/Panel/Margin/VBox"]
+[node name="HeroName" type="LineEdit" parent="Center/Panel/Margin/VBox/Row/NameCol"]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "…"
 
-[node name="LblLast" type="Label" parent="Center/Panel/Margin/VBox"]
+[node name="ClassCol" type="VBoxContainer" parent="Center/Panel/Margin/VBox/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="LblClass" type="Label" parent="Center/Panel/Margin/VBox/Row/ClassCol"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Фамилия"
+text = "Класс"
 
-[node name="LastName" type="LineEdit" parent="Center/Panel/Margin/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="LblAge" type="Label" parent="Center/Panel/Margin/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Возраст"
-
-[node name="Age" type="SpinBox" parent="Center/Panel/Margin/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-min_value = 18.0
-max_value = 80.0
-value = 30.0
-
-[node name="LblOrigin" type="Label" parent="Center/Panel/Margin/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Происхождение"
-
-[node name="Origin" type="OptionButton" parent="Center/Panel/Margin/VBox"]
+[node name="HeroClass" type="OptionButton" parent="Center/Panel/Margin/VBox/Row/ClassCol"]
 unique_name_in_owner = true
 layout_mode = 2
 

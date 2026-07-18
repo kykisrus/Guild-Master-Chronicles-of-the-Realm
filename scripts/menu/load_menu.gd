@@ -112,6 +112,7 @@ func _on_load_pressed(slot: int) -> void:
 	if err != "":
 		_show_info(tr("menu.load"), err)
 		return
+	MusicController.leave_menu_context()
 	get_tree().change_scene_to_file(HUB_SCENE)
 
 

@@ -65,21 +65,16 @@ intro.answer.world,"Королевство полно заказов, данже
 intro.ready_prompt,"Ну что, готов создать свою гильдию?"
 intro.choice.more_questions,У меня есть ещё вопросы.
 intro.thief_farewell,"Что ж, теперь это официально. Удачи тебе, Гильдмастер. Она понадобится."
-gm_registration.title,Регистрационная форма Гильдмастера
-gm_registration.first_name,Имя
-gm_registration.last_name,Фамилия
-gm_registration.age,Возраст
-gm_registration.origin,Происхождение
-gm_registration.origin.city,Городской житель
-gm_registration.origin.military,Военная семья
-gm_registration.origin.trade,Торговая семья
-gm_registration.origin.rural,Сельские земли
-gm_registration.origin.noble,Обедневший дворянский род
-gm_registration.origin.wanderer,Странник
-gm_registration.error_required,Укажите имя и фамилию.
-gm_registration.error_length,Имя и фамилия — не длиннее 24 символов.
-gm_registration.error_age,Возраст должен быть от 18 до 80.
-gm_registration.error_origin,Выберите происхождение.
+gm_registration.title,Регистрация Гильдмастера
+gm_registration.name,Имя
+gm_registration.class,Класс
+gm_registration.class.warrior,Воин
+gm_registration.class.archer,Лучник
+gm_registration.class.lancer,Копьеносец
+gm_registration.class.monk,Монах
+gm_registration.error_required,Укажите имя.
+gm_registration.error_length,Имя — не длиннее 24 символов.
+gm_registration.error_class,Выберите класс.
 guild_creation.title,Создание гильдии
 guild_creation.name,Название гильдии
 guild_creation.palette,Цвет гильдии
@@ -92,7 +87,7 @@ guild_creation.confirm,Основать гильдию «%s»?
 guild_creation.found,Основать
 guild_creation.founded,Гильдия «%s» основана.
 guild_creation.error_name,Название: от 3 до 32 символов.
-hub.resources_stub,"Золото %d · Еда %d · Материалы %d · Мана %d · Слава %d"
+hub.resources_stub,"Золото %d | Еда %d | Материалы %d | Мана %d | Слава %d"
 hub.day,День %d
 hub.end_day,Закончить день
 hub.later,Позже.

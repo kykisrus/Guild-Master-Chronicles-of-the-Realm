@@ -24,8 +24,23 @@ func _ready() -> void:
 
 
 func set_palette_frames(palette: String) -> void:
+	_apply_unit_frames("warrior", palette)
+
+
+func set_unit_frames(class_id: String, palette: String) -> void:
+	_apply_unit_frames(class_id, palette)
+
+
+func _apply_unit_frames(class_id: String, palette: String) -> void:
+	var unit := class_id.to_lower()
+	if unit.is_empty():
+		unit = "warrior"
 	var p := palette.to_lower()
-	var path := "res://resources/sprite_frames/tiny_swords/unit_warrior_%s.tres" % p
+	if p.is_empty():
+		p = "blue"
+	var path := "res://resources/sprite_frames/tiny_swords/unit_%s_%s.tres" % [unit, p]
+	if not ResourceLoader.exists(path):
+		path = "res://resources/sprite_frames/tiny_swords/unit_warrior_%s.tres" % p
 	if ResourceLoader.exists(path):
 		sprite_frames_path = path
 		_apply_frames(path)

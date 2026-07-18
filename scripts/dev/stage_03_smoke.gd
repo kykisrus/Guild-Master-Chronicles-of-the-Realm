@@ -32,11 +32,11 @@ func _run() -> void:
 	# Skip-path style: registration data → found guild → save → load hub
 	campaign.reset()
 	campaign.set_pending_guildmaster({
+		"name": "Иван",
 		"first_name": "Иван",
-		"last_name": "Тестов",
-		"age": 32,
-		"origin": "Странник",
-		"origin_key": "gm_registration.origin.wanderer",
+		"last_name": "",
+		"class_id": "warrior",
+		"class_name": "Воин",
 		"gender": "male",
 	})
 	campaign.set_pending_guild("Дымовая Застава", "blue")

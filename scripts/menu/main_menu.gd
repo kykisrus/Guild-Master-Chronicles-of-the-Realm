@@ -37,6 +37,7 @@ func _refresh_texts() -> void:
 
 
 func _on_new() -> void:
+	MusicController.leave_menu_context()
 	get_tree().change_scene_to_file(INTRO_SCENE)
 
 

@@ -21,6 +21,7 @@ var _patrol_points: Array[Vector2] = []
 
 
 func _ready() -> void:
+	MusicController.leave_menu_context()
 	FieldWorld.fill_field(world, "left")
 	_place_buildings()
 	_spawn_gm()
@@ -71,19 +72,32 @@ func _spawn_gm() -> void:
 	_gm = (load(GM_SCENE) as PackedScene).instantiate()
 	_gm.position = Vector2(1380, 800)
 	chars.add_child(_gm)
-	if _gm.has_method("set_palette_frames"):
+	var class_id := str(CampaignState.guildmaster.get("class_id", "warrior"))
+	if _gm.has_method("set_unit_frames"):
+		_gm.set_unit_frames(class_id, CampaignState.guild_palette())
+	elif _gm.has_method("set_palette_frames"):
 		_gm.set_palette_frames(CampaignState.guild_palette())
 
 
 func _setup_ui() -> void:
 	var theme := TinyThemeFactory.build()
+	var ui_root := get_node_or_null("UI/Root") as Control
+	if ui_root != null:
+		ui_root.theme = theme
 	top_bar.theme = theme
+	bottom_nav.theme = theme
 	guild_title.text = CampaignState.guild_display_name()
 	resources_label.text = tr("hub.resources_stub") % [0, 0, 0, 0, 0]
 	var day := int(CampaignState.time.get("day", 1))
 	day_label.text = tr("hub.day") % day
 	btn_end_day.text = tr("hub.end_day")
 	btn_end_day.pressed.connect(_on_end_day)
+
+	var exit_btn := Button.new()
+	exit_btn.name = "BtnExit"
+	exit_btn.text = tr("menu.exit")
+	exit_btn.pressed.connect(_on_exit_to_menu)
+	btn_end_day.get_parent().add_child(exit_btn)
 
 	for child in bottom_nav.get_children():
 		child.queue_free()
@@ -112,6 +126,10 @@ func _on_end_day() -> void:
 
 func _on_nav_stub() -> void:
 	_popup(tr("hub.section"), tr("hub.section_later"))
+
+
+func _on_exit_to_menu() -> void:
+	get_tree().change_scene_to_file("res://scenes/menu/main_menu.tscn")
 
 
 func _popup(title_text: String, body: String) -> void:

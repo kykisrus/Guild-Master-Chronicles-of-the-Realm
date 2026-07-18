@@ -18,7 +18,12 @@ var _awaiting_continue := false
 
 func _ready() -> void:
 	visible = false
-	panel.theme = TinyThemeFactory.build()
+	var theme := TinyThemeFactory.build()
+	panel.theme = theme
+	# Theme must be on a Control ancestor so dynamic choice buttons inherit it.
+	var root := get_node_or_null("Root") as Control
+	if root != null:
+		root.theme = theme
 	continue_hint.text = tr("intro.dialogue_continue")
 
 
@@ -62,8 +67,11 @@ func show_choices(choices: Array) -> void:
 			continue
 		var btn := Button.new()
 		var label := str(c.get("text", ""))
-		if bool(c.get("seen", false)):
-			label = "✓ " + label
+		var seen := bool(c.get("seen", false))
+		# Avoid Unicode checkmarks — Pix Cyrillic has no U+2713 (shows as "2713" tofu).
+		if seen:
+			btn.modulate = Color(0.72, 0.78, 0.72, 1.0)
+			btn.disabled = false
 		btn.text = label
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var cid := str(c.get("id", ""))

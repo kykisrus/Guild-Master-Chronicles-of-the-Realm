@@ -19,6 +19,7 @@ var _busy := false
 
 
 func _ready() -> void:
+	MusicController.leave_menu_context()
 	CampaignState.reset()
 	FieldWorld.fill_field(world, "left")
 	_place_barracks()

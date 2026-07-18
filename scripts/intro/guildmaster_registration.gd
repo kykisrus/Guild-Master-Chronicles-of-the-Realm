@@ -1,74 +1,59 @@
 extends Control
-## Guildmaster registration form.
+## Guildmaster registration: name + class only.
 
 const NEXT_SCENE := "res://scenes/intro/guild_creation.tscn"
 
-const ORIGINS := [
-	"gm_registration.origin.city",
-	"gm_registration.origin.military",
-	"gm_registration.origin.trade",
-	"gm_registration.origin.rural",
-	"gm_registration.origin.noble",
-	"gm_registration.origin.wanderer",
+## Tiny Swords unit ids used as visual class.
+const CLASSES := [
+	{"id": "warrior", "key": "gm_registration.class.warrior"},
+	{"id": "archer", "key": "gm_registration.class.archer"},
+	{"id": "lancer", "key": "gm_registration.class.lancer"},
+	{"id": "monk", "key": "gm_registration.class.monk"},
 ]
 
 @onready var title: Label = %Title
-@onready var first_edit: LineEdit = %FirstName
-@onready var last_edit: LineEdit = %LastName
-@onready var age_spin: SpinBox = %Age
-@onready var origin_opt: OptionButton = %Origin
+@onready var name_edit: LineEdit = %HeroName
+@onready var class_opt: OptionButton = %HeroClass
 @onready var error_label: Label = %ErrorLabel
 @onready var btn_confirm: Button = %BtnConfirm
-@onready var lbl_first: Label = %LblFirst
-@onready var lbl_last: Label = %LblLast
-@onready var lbl_age: Label = %LblAge
-@onready var lbl_origin: Label = %LblOrigin
+@onready var lbl_name: Label = %LblName
+@onready var lbl_class: Label = %LblClass
 
 
 func _ready() -> void:
 	theme = TinyThemeFactory.build()
 	title.text = tr("gm_registration.title")
-	lbl_first.text = tr("gm_registration.first_name")
-	lbl_last.text = tr("gm_registration.last_name")
-	lbl_age.text = tr("gm_registration.age")
-	lbl_origin.text = tr("gm_registration.origin")
+	lbl_name.text = tr("gm_registration.name")
+	lbl_class.text = tr("gm_registration.class")
 	btn_confirm.text = tr("menu.confirm")
 	error_label.text = ""
-	first_edit.max_length = 24
-	last_edit.max_length = 24
-	age_spin.min_value = 18
-	age_spin.max_value = 80
-	age_spin.value = 30
-	origin_opt.clear()
-	for key in ORIGINS:
-		origin_opt.add_item(tr(key))
-	origin_opt.select(0)
+	name_edit.max_length = 24
+	class_opt.clear()
+	for c in CLASSES:
+		class_opt.add_item(tr(str(c["key"])))
+	class_opt.select(0)
 	btn_confirm.pressed.connect(_on_confirm)
 
 
 func _on_confirm() -> void:
-	var first := first_edit.text.strip_edges()
-	var last := last_edit.text.strip_edges()
-	var age := int(age_spin.value)
-	if first.is_empty() or last.is_empty():
+	var hero_name := name_edit.text.strip_edges()
+	if hero_name.is_empty():
 		error_label.text = tr("gm_registration.error_required")
 		return
-	if first.length() > 24 or last.length() > 24:
+	if hero_name.length() > 24:
 		error_label.text = tr("gm_registration.error_length")
 		return
-	if age < 18 or age > 80:
-		error_label.text = tr("gm_registration.error_age")
+	if class_opt.selected < 0 or class_opt.selected >= CLASSES.size():
+		error_label.text = tr("gm_registration.error_class")
 		return
-	if origin_opt.selected < 0:
-		error_label.text = tr("gm_registration.error_origin")
-		return
-	var origin_key: String = ORIGINS[origin_opt.selected]
+	var class_data: Dictionary = CLASSES[class_opt.selected]
+	var class_id := str(class_data["id"])
 	CampaignState.set_pending_guildmaster({
-		"first_name": first,
-		"last_name": last,
-		"age": age,
-		"origin": tr(origin_key),
-		"origin_key": origin_key,
+		"name": hero_name,
+		"first_name": hero_name,
+		"last_name": "",
+		"class_id": class_id,
+		"class_name": tr(str(class_data["key"])),
 		"gender": "male",
 	})
 	await SceneTransition.change_scene(NEXT_SCENE)

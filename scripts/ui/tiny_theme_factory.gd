@@ -10,16 +10,16 @@ const FONT_PATH := "res://assets/fonts/ui/PixCyrillic-AShortHikeEdition.ttf"
 const COL_TEXT := Color(0.96, 0.94, 0.88, 1.0)
 const COL_TEXT_DIM := Color(0.78, 0.76, 0.70, 1.0)
 const COL_DISABLED := Color(0.55, 0.53, 0.50, 1.0)
-const COL_ACCENT := Color(0.55, 0.82, 0.98, 1.0)
+const COL_ACCENT := Color(0.86, 0.72, 0.42, 1.0)
 
-const COL_PANEL := Color(0.08, 0.09, 0.14, 0.92)
-const COL_PANEL_BORDER := Color(0.28, 0.32, 0.42, 1.0)
-const COL_BTN := Color(0.14, 0.16, 0.22, 1.0)
-const COL_BTN_HOVER := Color(0.20, 0.24, 0.34, 1.0)
-const COL_BTN_PRESSED := Color(0.10, 0.12, 0.18, 1.0)
-const COL_BTN_DISABLED := Color(0.10, 0.10, 0.12, 1.0)
-const COL_BTN_BORDER := Color(0.42, 0.46, 0.56, 1.0)
-const COL_BTN_BORDER_FOCUS := Color(0.55, 0.82, 0.98, 1.0)
+const COL_PANEL := Color(0.11, 0.09, 0.08, 0.94)
+const COL_PANEL_BORDER := Color(0.42, 0.36, 0.28, 1.0)
+const COL_BTN := Color(0.18, 0.15, 0.12, 1.0)
+const COL_BTN_HOVER := Color(0.26, 0.22, 0.17, 1.0)
+const COL_BTN_PRESSED := Color(0.12, 0.10, 0.08, 1.0)
+const COL_BTN_DISABLED := Color(0.10, 0.09, 0.08, 1.0)
+const COL_BTN_BORDER := Color(0.48, 0.42, 0.34, 1.0)
+const COL_BTN_BORDER_FOCUS := Color(0.86, 0.72, 0.42, 1.0)
 
 
 static func build() -> Theme:
