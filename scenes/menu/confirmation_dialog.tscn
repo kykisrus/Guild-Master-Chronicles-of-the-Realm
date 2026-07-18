@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/menu/confirmation_dialog.gd" id="1"]
+
+[node name="TinyConfirmDialog" type="ConfirmationDialog"]
+initial_position = 2
+size = Vector2i(480, 200)
+visible = false
+ok_button_text = "Удалить"
+dialog_text = "…"
+script = ExtResource("1")
