@@ -54,9 +54,10 @@ static func build() -> Theme:
 	theme.set_color("font_pressed_color", "OptionButton", COL_ACCENT)
 	theme.set_color("font_disabled_color", "OptionButton", COL_DISABLED)
 
-	var line := TinySwordsUi.style_from_sheet(TinySwordsUi.WOOD_TABLE, 8, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN)
+	var line := TinySwordsUi.style_horizontal_bar(TinySwordsUi.WOOD_TABLE, 8, 12)
 	theme.set_stylebox("normal", "LineEdit", line)
 	theme.set_stylebox("focus", "LineEdit", line)
+	theme.set_constant("minimum_character_width", "LineEdit", 8)
 	theme.set_color("font_color", "LineEdit", COL_TEXT)
 	theme.set_color("font_uneditable_color", "LineEdit", COL_DISABLED)
 	theme.set_color("caret_color", "LineEdit", COL_ACCENT)

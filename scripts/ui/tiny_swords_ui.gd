@@ -31,31 +31,17 @@ static func style_from_sheet(path: String, content_margin := 18, max_tex_margin 
 	var meta := _bake_meta(path)
 	if meta.is_empty():
 		return box
-	var tex: ImageTexture = meta["tex"]
-	var ml := int(meta["ml"])
-	var mr := int(meta["mr"])
-	var mt := int(meta["mt"])
-	var mb := int(meta["mb"])
-	if max_tex_margin > 0:
-		var need := float(maxi(maxi(ml, mr), maxi(mt, mb)))
-		if need > float(max_tex_margin):
-			var scale := float(max_tex_margin) / need
-			tex = _scale_texture(tex, scale)
-			ml = maxi(1, int(round(float(ml) * scale)))
-			mr = maxi(1, int(round(float(mr) * scale)))
-			mt = maxi(1, int(round(float(mt) * scale)))
-			mb = maxi(1, int(round(float(mb) * scale)))
-	box.texture = tex
-	box.texture_margin_left = ml
-	box.texture_margin_right = mr
-	box.texture_margin_top = mt
-	box.texture_margin_bottom = mb
-	box.content_margin_left = content_margin
-	box.content_margin_right = content_margin
-	box.content_margin_top = content_margin
-	box.content_margin_bottom = content_margin
-	box.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
-	box.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	_apply_meta_to_stylebox(box, meta, content_margin, max_tex_margin, false)
+	return box
+
+
+## Horizontal bar (LineEdit / TopBar): middle row only, no vertical 9-slice crush.
+static func style_horizontal_bar(path: String, content_margin := 8, max_side_margin := 12) -> StyleBoxTexture:
+	var box := StyleBoxTexture.new()
+	var meta := _bake_middle_row_meta(path)
+	if meta.is_empty():
+		return style_from_sheet(path, content_margin, max_side_margin)
+	_apply_meta_to_stylebox(box, meta, content_margin, max_side_margin, true)
 	return box
 
 
@@ -94,6 +80,123 @@ static func load_avatar(path: String) -> Texture2D:
 	if ResourceLoader.exists(path):
 		return load(path) as Texture2D
 	return null
+
+
+static func _apply_meta_to_stylebox(
+	box: StyleBoxTexture,
+	meta: Dictionary,
+	content_margin: int,
+	max_tex_margin: int,
+	horizontal_bar: bool
+) -> void:
+	var tex: ImageTexture = meta["tex"]
+	var ml := int(meta["ml"])
+	var mr := int(meta["mr"])
+	var mt := int(meta["mt"])
+	var mb := int(meta["mb"])
+	if horizontal_bar:
+		# Keep full strip height; only slice left/right so wood doesn't get crushed bands.
+		mt = 0
+		mb = 0
+		if max_tex_margin > 0:
+			var need_h := float(maxi(ml, mr))
+			if need_h > float(max_tex_margin):
+				var scale := float(max_tex_margin) / need_h
+				tex = _scale_texture(tex, scale)
+				ml = maxi(1, int(round(float(ml) * scale)))
+				mr = maxi(1, int(round(float(mr) * scale)))
+		# Fit typical LineEdit / thin bar height without vertical seams.
+		var th := tex.get_height()
+		if th > 32:
+			var vscale := 32.0 / float(th)
+			tex = _scale_texture(tex, vscale)
+			ml = maxi(1, int(round(float(ml) * vscale)))
+			mr = maxi(1, int(round(float(mr) * vscale)))
+	elif max_tex_margin > 0:
+		var need := float(maxi(maxi(ml, mr), maxi(mt, mb)))
+		if need > float(max_tex_margin):
+			var scale := float(max_tex_margin) / need
+			tex = _scale_texture(tex, scale)
+			ml = maxi(1, int(round(float(ml) * scale)))
+			mr = maxi(1, int(round(float(mr) * scale)))
+			mt = maxi(1, int(round(float(mt) * scale)))
+			mb = maxi(1, int(round(float(mb) * scale)))
+	box.texture = tex
+	box.texture_margin_left = ml
+	box.texture_margin_right = mr
+	box.texture_margin_top = mt
+	box.texture_margin_bottom = mb
+	box.content_margin_left = content_margin
+	box.content_margin_right = content_margin
+	box.content_margin_top = content_margin
+	box.content_margin_bottom = content_margin
+	box.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	box.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+
+
+static func _bake_middle_row_meta(sheet_path: String) -> Dictionary:
+	var cache_key := sheet_path + "::midrow"
+	if _bake_cache.has(cache_key):
+		return _bake_cache[cache_key] as Dictionary
+	if not ResourceLoader.exists(sheet_path):
+		return {}
+	var src_tex := load(sheet_path) as Texture2D
+	if src_tex == null:
+		return {}
+	var src: Image = src_tex.get_image()
+	if src == null:
+		return {}
+	if src.is_compressed():
+		src.decompress()
+	src.convert(Image.FORMAT_RGBA8)
+	var w := src.get_width()
+	var h := src.get_height()
+	var cw := w / 3
+	var ch := h / 3
+	if cw < 8 or ch < 8:
+		return {}
+
+	var crops: Array = []
+	for col in range(3):
+		var cell := src.get_region(Rect2i(col * cw, ch, cw, ch)) # middle row
+		var bbox := _content_bbox(cell)
+		if bbox.size.x <= 0 or bbox.size.y <= 0:
+			var empty := Image.create(1, 1, false, Image.FORMAT_RGBA8)
+			empty.fill(Color(0, 0, 0, 0))
+			crops.append(empty)
+		else:
+			crops.append(cell.get_region(bbox))
+
+	var col_w: Array[int] = [crops[0].get_width(), crops[1].get_width(), crops[2].get_width()]
+	var row_h := maxi(crops[0].get_height(), maxi(crops[1].get_height(), crops[2].get_height()))
+	var out_w := col_w[0] + col_w[1] + col_w[2]
+	var out := Image.create(out_w, row_h, false, Image.FORMAT_RGBA8)
+	out.fill(Color(0, 0, 0, 0))
+	var x := 0
+	for col in range(3):
+		var crop: Image = crops[col]
+		var cell_img := Image.create(col_w[col], row_h, false, Image.FORMAT_RGBA8)
+		cell_img.fill(_sample_fill_color(crop))
+		var ox := 0
+		if col == 1:
+			ox = (col_w[col] - crop.get_width()) / 2
+		elif col == 2:
+			ox = col_w[col] - crop.get_width()
+		var oy := (row_h - crop.get_height()) / 2
+		cell_img.blit_rect(crop, Rect2i(0, 0, crop.get_width(), crop.get_height()), Vector2i(ox, oy))
+		out.blit_rect(cell_img, Rect2i(0, 0, col_w[col], row_h), Vector2i(x, 0))
+		x += col_w[col]
+
+	var tex := ImageTexture.create_from_image(out)
+	var meta := {
+		"tex": tex,
+		"ml": col_w[0],
+		"mr": col_w[2],
+		"mt": 0,
+		"mb": 0,
+	}
+	_bake_cache[cache_key] = meta
+	return meta
 
 
 static func _bake_meta(sheet_path: String) -> Dictionary:

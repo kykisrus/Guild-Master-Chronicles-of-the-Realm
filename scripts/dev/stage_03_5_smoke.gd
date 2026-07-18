@@ -20,6 +20,12 @@ func _run() -> void:
 	assert(btn_style.texture_margin_top <= TinySwordsUi.DEFAULT_MAX_TEX_MARGIN + 1, "button margin not capped")
 	print("Button style margins OK t=", btn_style.texture_margin_top)
 
+	var bar: StyleBoxTexture = TinySwordsUi.style_horizontal_bar(TinySwordsUi.WOOD_TABLE, 8, 12)
+	assert(bar.texture != null, "wood bar null")
+	assert(is_equal_approx(bar.texture_margin_top, 0.0), "bar must not 9-slice vertically")
+	assert(bar.texture_margin_left <= 12.0 + 0.5, "bar side margin capped")
+	print("Wood bar OK h=", bar.texture.get_height(), " ml=", bar.texture_margin_left)
+
 	var btn_bake: ImageTexture = TinySwordsUi.bake_seamless_panel(TinySwordsUi.BTN_BLUE)
 	assert(btn_bake != null, "bake button null")
 	print("Bake button OK")
