@@ -24,14 +24,18 @@
 
 ## Шрифт интерфейса
 
-- **Galmuri11** — автор **quiple**  
+- **Pixelify Sans** — автор **Stefie Justprince** / [Pixelify Sans Project](https://github.com/eifetx/Pixelify-Sans)  
   Лицензия: SIL Open Font License 1.1  
-  Файлы: `res://assets/fonts/ui/Galmuri11.ttf`  
-  Лицензия: `res://assets/fonts/licenses/Galmuri_OFL.txt`  
-  Назначение: весь русский UI (включая Ё/ё).  
-  Источник: https://github.com/quiple/galmuri
+  Файлы: `res://assets/fonts/ui/PixelifySans-Regular.ttf`, `PixelifySans-Bold.ttf`  
+  Лицензия: `res://assets/fonts/licenses/PixelifySans_OFL.txt`  
+  Назначение: основной UI-шрифт (кириллица, включая Ё/ё).  
+  Источник: https://fonts.google.com/specimen/Pixelify+Sans
 
-> Примечание: в плане этапа указан LanaPixel (CC0), но репозиторий на момент сборки был недоступен. Выбран Galmuri11 как свободный пиксельный шрифт с полной кириллицей и Ё/ё.
+- **Galmuri11** — автор **quiple** (fallback)  
+  Лицензия: SIL Open Font License 1.1  
+  Файл: `res://assets/fonts/ui/Galmuri11.ttf`  
+  Назначение: запасной шрифт для глифов, отсутствующих в Pixelify Sans (заглавные кириллические **О** и **П**).  
+  Источник: https://github.com/quiple/galmuri
 
 ---
 

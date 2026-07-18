@@ -51,7 +51,9 @@ func _run() -> void:
 	var theme: Theme = TinyThemeFactory.build()
 	assert(theme != null, "Theme null")
 	assert(theme.default_font != null, "Font missing in theme")
+	var sample_ru := "Новая игра ОП"
 	print("Theme font OK: ", theme.default_font)
+	print("RU sample: ", sample_ru)
 
 	print("=== UI SMOKE TEST PASS ===")
 	quit(0)

@@ -1,10 +1,13 @@
 class_name TinyThemeFactory
 extends RefCounted
-## Builds a readable pixel UI Theme (Tiny palette + Galmuri).
+## Builds a readable pixel UI Theme (Tiny palette + Pixelify Sans).
 ## Uses StyleBoxFlat for reliable contrast; texture atlases are reserved
 ## for later when 9-slice regions are authored explicitly.
 
-const FONT_PATH := "res://assets/fonts/ui/Galmuri11.ttf"
+const FONT_PATH := "res://assets/fonts/ui/PixelifySans-Regular.ttf"
+const FONT_BOLD_PATH := "res://assets/fonts/ui/PixelifySans-Bold.ttf"
+## Pixelify Sans lacks uppercase Cyrillic О/П — Galmuri fills gaps.
+const FONT_FALLBACK_PATH := "res://assets/fonts/ui/Galmuri11.ttf"
 
 ## Light text on dark controls — high contrast for Steam Deck / night scenes.
 const COL_TEXT := Color(0.96, 0.94, 0.88, 1.0)
@@ -101,22 +104,27 @@ static func build() -> Theme:
 	return theme
 
 
-static func _load_font() -> FontFile:
+static func _load_font() -> Font:
 	if not ResourceLoader.exists(FONT_PATH):
 		push_warning("Font missing: %s" % FONT_PATH)
 		return null
 	var loaded: Resource = load(FONT_PATH)
-	if loaded is FontFile:
-		var font := loaded as FontFile
-		font.allow_system_fallback = false
-		return font
-	var font2 := FontFile.new()
-	var err := font2.load_dynamic_font(FONT_PATH)
-	if err != OK:
-		push_warning("Failed to load font: %s (%d)" % [FONT_PATH, err])
-		return null
-	font2.allow_system_fallback = false
-	return font2
+	if not (loaded is FontFile):
+		var font2 := FontFile.new()
+		var err := font2.load_dynamic_font(FONT_PATH)
+		if err != OK:
+			push_warning("Failed to load font: %s (%d)" % [FONT_PATH, err])
+			return null
+		loaded = font2
+	var font := (loaded as FontFile).duplicate(true) as FontFile
+	font.allow_system_fallback = false
+	if ResourceLoader.exists(FONT_FALLBACK_PATH):
+		var fb_res: Resource = load(FONT_FALLBACK_PATH)
+		if fb_res is FontFile:
+			var fallback := (fb_res as FontFile).duplicate(true) as FontFile
+			fallback.allow_system_fallback = false
+			font.fallbacks = [fallback] as Array[Font]
+	return font
 
 
 static func _flat_panel(bg: Color, border: Color) -> StyleBoxFlat:
