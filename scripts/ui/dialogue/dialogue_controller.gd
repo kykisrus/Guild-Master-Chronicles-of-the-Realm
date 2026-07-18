@@ -23,7 +23,7 @@ func _ready() -> void:
 	var root := get_node_or_null("Root") as Control
 	if root != null:
 		root.theme = TinySwordsThemeFactory.build()
-	panel.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.PAPER_SPECIAL, 14))
+	panel.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.PAPER_SPECIAL, 14, TinySwordsUi.PANEL_MAX_TEX_MARGIN))
 	var frame := StyleBoxFlat.new()
 	frame.bg_color = Color(0.08, 0.07, 0.06, 0.95)
 	frame.border_color = Color(0.85, 0.72, 0.32, 1.0)

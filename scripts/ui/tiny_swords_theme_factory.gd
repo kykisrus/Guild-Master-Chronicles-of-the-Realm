@@ -21,15 +21,15 @@ static func build() -> Theme:
 			theme.set_font("font", type_name, font)
 			theme.set_font_size("font_size", type_name, 16)
 
-	var panel := TinySwordsUi.style_from_sheet(TinySwordsUi.PAPER_SPECIAL, 16)
+	var panel := TinySwordsUi.style_from_sheet(TinySwordsUi.PAPER_SPECIAL, 16, TinySwordsUi.PANEL_MAX_TEX_MARGIN)
 	theme.set_stylebox("panel", "PanelContainer", panel)
 	theme.set_stylebox("panel", "Panel", panel)
 	theme.set_stylebox("panel", "PopupPanel", panel)
 	theme.set_stylebox("panel", "AcceptDialog", panel)
 	theme.set_stylebox("panel", "ConfirmationDialog", panel)
 
-	var btn_n := TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 12)
-	var btn_p := TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE_PRESSED, 12)
+	var btn_n := TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 10, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN)
+	var btn_p := TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE_PRESSED, 10, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN)
 	for type_name in ["Button", "OptionButton"]:
 		theme.set_stylebox("normal", type_name, btn_n)
 		theme.set_stylebox("hover", type_name, btn_n)
@@ -54,7 +54,7 @@ static func build() -> Theme:
 	theme.set_color("font_pressed_color", "OptionButton", COL_ACCENT)
 	theme.set_color("font_disabled_color", "OptionButton", COL_DISABLED)
 
-	var line := TinySwordsUi.style_from_sheet(TinySwordsUi.WOOD_TABLE, 10)
+	var line := TinySwordsUi.style_from_sheet(TinySwordsUi.WOOD_TABLE, 8, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN)
 	theme.set_stylebox("normal", "LineEdit", line)
 	theme.set_stylebox("focus", "LineEdit", line)
 	theme.set_color("font_color", "LineEdit", COL_TEXT)

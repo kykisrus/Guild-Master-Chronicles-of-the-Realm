@@ -123,12 +123,14 @@ static func _scatter_decor(parent: Node2D, water_edge: String) -> void:
 	decor.name = "Decorations"
 	decor.y_sort_enabled = true
 	parent.add_child(decor)
-	var min_x := water_width() + float(TILE) if water_edge == "left" else float(TILE)
-	var max_x := MAP_SIZE.x - float(TILE) if water_edge == "left" else MAP_SIZE.x - water_width() - float(TILE)
+	# Keep crowns inland: trees are wide (~200px), so pad beyond water edge.
+	var land_pad := float(TILE * 4)
+	var min_x := water_width() + land_pad if water_edge == "left" else land_pad
+	var max_x := MAP_SIZE.x - land_pad if water_edge == "left" else MAP_SIZE.x - water_width() - land_pad
 	var spots: Array[Vector2] = [
-		Vector2(420, 380), Vector2(560, 900), Vector2(1100, 420),
-		Vector2(1400, 1100), Vector2(780, 1280), Vector2(1680, 640),
-		Vector2(520, 1200), Vector2(1500, 300),
+		Vector2(640, 380), Vector2(720, 900), Vector2(1100, 420),
+		Vector2(1400, 1100), Vector2(900, 1280), Vector2(1680, 640),
+		Vector2(780, 1200), Vector2(1500, 300),
 	]
 	var i := 0
 	for p in spots:
@@ -145,6 +147,11 @@ static func _scatter_decor(parent: Node2D, water_edge: String) -> void:
 		s.centered = true
 		s.position = pos
 		if s.texture:
+			var half_w := float(s.texture.get_width()) * 0.5
+			if water_edge == "left":
+				s.position.x = maxf(s.position.x, water_width() + half_w + float(TILE))
+			else:
+				s.position.x = minf(s.position.x, MAP_SIZE.x - water_width() - half_w - float(TILE))
 			s.offset = Vector2(0, -s.texture.get_height() * 0.5)
 		decor.add_child(s)
 		i += 1

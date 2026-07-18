@@ -97,7 +97,7 @@ func _setup_ui() -> void:
 	if ui_root != null:
 		ui_root.theme = _theme
 	top_bar.theme = _theme
-	top_bar.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.WOOD_TABLE, 12))
+	top_bar.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.WOOD_TABLE, 10, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN))
 	bottom_nav.theme = _theme
 	guild_title.text = CampaignState.guild_display_name()
 	resources_label.text = tr("hub.resources_stub") % [0, 0, 0, 0, 0]

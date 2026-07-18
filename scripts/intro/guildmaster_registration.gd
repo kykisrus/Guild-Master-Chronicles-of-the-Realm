@@ -50,10 +50,10 @@ func _ready() -> void:
 
 
 func _apply_tiny_swords_card() -> void:
-	TinySwordsUi.apply_nine_patch(card, TinySwordsUi.PAPER_SPECIAL)
-	btn_confirm.add_theme_stylebox_override("normal", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 14))
-	btn_confirm.add_theme_stylebox_override("hover", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 14))
-	btn_confirm.add_theme_stylebox_override("pressed", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE_PRESSED, 14))
+	TinySwordsUi.apply_nine_patch(card, TinySwordsUi.PAPER_SPECIAL, TinySwordsUi.PANEL_MAX_TEX_MARGIN)
+	btn_confirm.add_theme_stylebox_override("normal", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 10, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN))
+	btn_confirm.add_theme_stylebox_override("hover", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 10, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN))
+	btn_confirm.add_theme_stylebox_override("pressed", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE_PRESSED, 10, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN))
 	btn_confirm.add_theme_color_override("font_color", Color(0.95, 0.95, 0.92, 1.0))
 	btn_confirm.add_theme_color_override("font_hover_color", Color(1, 1, 1, 1))
 	btn_confirm.add_theme_color_override("font_pressed_color", Color(0.9, 0.85, 0.7, 1))

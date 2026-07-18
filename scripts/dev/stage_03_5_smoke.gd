@@ -15,6 +15,11 @@ func _run() -> void:
 	assert(baked.get_width() >= 24 and baked.get_height() >= 24, "bake too small")
 	print("Bake SpecialPaper OK ", baked.get_width(), "x", baked.get_height())
 
+	var btn_style: StyleBoxTexture = TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 10, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN)
+	assert(btn_style.texture != null, "button style texture null")
+	assert(btn_style.texture_margin_top <= TinySwordsUi.DEFAULT_MAX_TEX_MARGIN + 1, "button margin not capped")
+	print("Button style margins OK t=", btn_style.texture_margin_top)
+
 	var btn_bake: ImageTexture = TinySwordsUi.bake_seamless_panel(TinySwordsUi.BTN_BLUE)
 	assert(btn_bake != null, "bake button null")
 	print("Bake button OK")

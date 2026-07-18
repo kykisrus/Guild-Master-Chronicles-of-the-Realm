@@ -22,10 +22,10 @@ var _confirm: ConfirmationDialog
 
 func _ready() -> void:
 	theme = TinySwordsThemeFactory.build()
-	panel.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.PAPER_SPECIAL, 18))
-	btn_found.add_theme_stylebox_override("normal", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 14))
-	btn_found.add_theme_stylebox_override("hover", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 14))
-	btn_found.add_theme_stylebox_override("pressed", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE_PRESSED, 14))
+	panel.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.PAPER_SPECIAL, 18, TinySwordsUi.PANEL_MAX_TEX_MARGIN))
+	btn_found.add_theme_stylebox_override("normal", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 10, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN))
+	btn_found.add_theme_stylebox_override("hover", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 10, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN))
+	btn_found.add_theme_stylebox_override("pressed", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE_PRESSED, 10, TinySwordsUi.DEFAULT_MAX_TEX_MARGIN))
 	title.text = tr("guild_creation.title")
 	lbl_name.text = tr("guild_creation.name")
 	lbl_palette.text = tr("guild_creation.palette")

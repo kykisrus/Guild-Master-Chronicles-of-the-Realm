@@ -1,5 +1,5 @@
 extends Node2D
-## Intro exterior: click abandoned barracks to enter.
+## Intro exterior: cinematic walk to abandoned barracks, then enter.
 
 const MAP_W := 2048.0
 const MAP_H := 1536.0
@@ -15,7 +15,6 @@ const BARRACKS_TEX := "res://assets/tiny_swords/buildings/blue/Barracks.png"
 
 var _gm: Node2D
 var _barracks: Sprite2D
-var _barracks_click: ClickableTarget
 var _skip_confirm: ConfirmationDialog
 var _busy := false
 
@@ -31,6 +30,8 @@ func _ready() -> void:
 	skip_btn.text = tr("intro.skip")
 	skip_btn.pressed.connect(_on_skip_pressed)
 	building_label.text = tr("intro.abandoned_barracks")
+	await get_tree().process_frame
+	_run_intro()
 
 
 func _place_barracks() -> void:
@@ -47,14 +48,6 @@ func _place_barracks() -> void:
 		_barracks.offset = Vector2(0, -_barracks.texture.get_height() * 0.5)
 	buildings.add_child(_barracks)
 
-	var tw := _barracks.texture.get_width() if _barracks.texture else 160
-	var th := _barracks.texture.get_height() if _barracks.texture else 160
-	_barracks_click = ClickableTarget.new()
-	_barracks_click.name = "BarracksClick"
-	_barracks.add_child(_barracks_click)
-	_barracks_click.setup(_barracks, Vector2(tw, th), Vector2(0, -th * 0.5))
-	_barracks_click.clicked.connect(_on_barracks_clicked)
-
 
 func _spawn_gm() -> void:
 	var chars := Node2D.new()
@@ -62,18 +55,21 @@ func _spawn_gm() -> void:
 	chars.y_sort_enabled = true
 	world.add_child(chars)
 	_gm = (load(GM_SCENE) as PackedScene).instantiate()
-	_gm.position = Vector2(700, 720)
+	_gm.position = Vector2(380, 720)
 	chars.add_child(_gm)
 
 
-func _on_barracks_clicked() -> void:
+func _run_intro() -> void:
 	if _busy or _gm == null:
 		return
 	_busy = true
-	if _barracks_click != null:
-		_barracks_click.set_click_enabled(false)
-	var entrance := Vector2(1500, 700)
-	await _gm.walk_to(entrance)
+	var path: Array[Vector2] = [
+		Vector2(700, 720),
+		Vector2(1100, 720),
+		Vector2(1400, 720),
+		Vector2(1500, 700),
+	]
+	await _gm.walk_path(path)
 	await _gm.play_enter_building()
 	await SceneTransition.change_scene(BARRACKS_SCENE)
 

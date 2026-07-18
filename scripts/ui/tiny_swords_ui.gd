@@ -12,81 +12,44 @@ const BTN_SMALL_PRESSED := "res://assets/tiny_swords/ui/buttons/SmallBlueSquareB
 const AVATAR_THIEF := "res://assets/tiny_swords/ui/avatars/Avatars_08.png"
 const AVATAR_GM := "res://assets/tiny_swords/ui/avatars/Avatars_01.png"
 
-static var _bake_cache: Dictionary = {}
+## Cap texture margins so short buttons (~40px) don't shred 9-slice.
+const DEFAULT_MAX_TEX_MARGIN := 14
+const PANEL_MAX_TEX_MARGIN := 28
+
+static var _bake_cache: Dictionary = {} # path -> {tex, ml, mr, mt, mb}
 
 
 static func bake_seamless_panel(sheet_path: String) -> ImageTexture:
-	if _bake_cache.has(sheet_path):
-		return _bake_cache[sheet_path] as ImageTexture
-	if not ResourceLoader.exists(sheet_path):
+	var meta := _bake_meta(sheet_path)
+	if meta.is_empty():
 		return null
-	var src_tex := load(sheet_path) as Texture2D
-	if src_tex == null:
-		return null
-	var src: Image = src_tex.get_image()
-	if src == null:
-		return null
-	if src.is_compressed():
-		src.decompress()
-	src.convert(Image.FORMAT_RGBA8)
-	var w := src.get_width()
-	var h := src.get_height()
-	var cw := w / 3
-	var ch := h / 3
-	if cw < 8 or ch < 8:
-		return null
-
-	# Crop non-black content from each of 9 cells.
-	var crops: Array = []
-	var max_cw := 1
-	var max_ch := 1
-	for row in range(3):
-		for col in range(3):
-			var cell := src.get_region(Rect2i(col * cw, row * ch, cw, ch))
-			var bbox := _content_bbox(cell)
-			var crop: Image
-			if bbox.size.x <= 0 or bbox.size.y <= 0:
-				crop = Image.create(1, 1, false, Image.FORMAT_RGBA8)
-				crop.fill(Color(0, 0, 0, 0))
-			else:
-				crop = cell.get_region(bbox)
-			crops.append(crop)
-			max_cw = maxi(max_cw, crop.get_width())
-			max_ch = maxi(max_ch, crop.get_height())
-
-	# Uniform cell for clean 9-slice margins.
-	var cell_out := maxi(maxi(max_cw, max_ch), 16)
-	var out := Image.create(cell_out * 3, cell_out * 3, false, Image.FORMAT_RGBA8)
-	out.fill(Color(0, 0, 0, 0))
-	for i in range(9):
-		var row := i / 3
-		var col := i % 3
-		var crop: Image = crops[i]
-		var padded := Image.create(cell_out, cell_out, false, Image.FORMAT_RGBA8)
-		# Fill with average edge color from crop center-ish for stretch fill
-		var fill_c := _sample_fill_color(crop)
-		padded.fill(fill_c)
-		var ox := (cell_out - crop.get_width()) / 2
-		var oy := (cell_out - crop.get_height()) / 2
-		padded.blit_rect(crop, Rect2i(0, 0, crop.get_width(), crop.get_height()), Vector2i(ox, oy))
-		out.blit_rect(padded, Rect2i(0, 0, cell_out, cell_out), Vector2i(col * cell_out, row * cell_out))
-
-	var tex := ImageTexture.create_from_image(out)
-	_bake_cache[sheet_path] = tex
-	return tex
+	return meta["tex"] as ImageTexture
 
 
-static func style_from_sheet(path: String, content_margin := 18) -> StyleBoxTexture:
+static func style_from_sheet(path: String, content_margin := 18, max_tex_margin := DEFAULT_MAX_TEX_MARGIN) -> StyleBoxTexture:
 	var box := StyleBoxTexture.new()
-	var baked := bake_seamless_panel(path)
-	if baked == null:
+	var meta := _bake_meta(path)
+	if meta.is_empty():
 		return box
-	box.texture = baked
-	var cell := maxi(baked.get_width() / 3, 8)
-	box.texture_margin_left = cell
-	box.texture_margin_right = cell
-	box.texture_margin_top = cell
-	box.texture_margin_bottom = cell
+	var tex: ImageTexture = meta["tex"]
+	var ml := int(meta["ml"])
+	var mr := int(meta["mr"])
+	var mt := int(meta["mt"])
+	var mb := int(meta["mb"])
+	if max_tex_margin > 0:
+		var need := float(maxi(maxi(ml, mr), maxi(mt, mb)))
+		if need > float(max_tex_margin):
+			var scale := float(max_tex_margin) / need
+			tex = _scale_texture(tex, scale)
+			ml = maxi(1, int(round(float(ml) * scale)))
+			mr = maxi(1, int(round(float(mr) * scale)))
+			mt = maxi(1, int(round(float(mt) * scale)))
+			mb = maxi(1, int(round(float(mb) * scale)))
+	box.texture = tex
+	box.texture_margin_left = ml
+	box.texture_margin_right = mr
+	box.texture_margin_top = mt
+	box.texture_margin_bottom = mb
 	box.content_margin_left = content_margin
 	box.content_margin_right = content_margin
 	box.content_margin_top = content_margin
@@ -96,16 +59,31 @@ static func style_from_sheet(path: String, content_margin := 18) -> StyleBoxText
 	return box
 
 
-static func apply_nine_patch(rect: NinePatchRect, sheet_path: String) -> void:
-	var baked := bake_seamless_panel(sheet_path)
-	if baked == null or rect == null:
+static func apply_nine_patch(rect: NinePatchRect, sheet_path: String, max_tex_margin := PANEL_MAX_TEX_MARGIN) -> void:
+	if rect == null:
 		return
-	rect.texture = baked
-	var cell := maxi(baked.get_width() / 3, 8)
-	rect.patch_margin_left = cell
-	rect.patch_margin_right = cell
-	rect.patch_margin_top = cell
-	rect.patch_margin_bottom = cell
+	var meta := _bake_meta(sheet_path)
+	if meta.is_empty():
+		return
+	var tex: ImageTexture = meta["tex"]
+	var ml := int(meta["ml"])
+	var mr := int(meta["mr"])
+	var mt := int(meta["mt"])
+	var mb := int(meta["mb"])
+	if max_tex_margin > 0:
+		var need := float(maxi(maxi(ml, mr), maxi(mt, mb)))
+		if need > float(max_tex_margin):
+			var scale := float(max_tex_margin) / need
+			tex = _scale_texture(tex, scale)
+			ml = maxi(1, int(round(float(ml) * scale)))
+			mr = maxi(1, int(round(float(mr) * scale)))
+			mt = maxi(1, int(round(float(mt) * scale)))
+			mb = maxi(1, int(round(float(mb) * scale)))
+	rect.texture = tex
+	rect.patch_margin_left = ml
+	rect.patch_margin_right = mr
+	rect.patch_margin_top = mt
+	rect.patch_margin_bottom = mb
 
 
 static func apply_dialogue_theme(control: Control) -> void:
@@ -116,6 +94,106 @@ static func load_avatar(path: String) -> Texture2D:
 	if ResourceLoader.exists(path):
 		return load(path) as Texture2D
 	return null
+
+
+static func _bake_meta(sheet_path: String) -> Dictionary:
+	if _bake_cache.has(sheet_path):
+		return _bake_cache[sheet_path] as Dictionary
+	if not ResourceLoader.exists(sheet_path):
+		return {}
+	var src_tex := load(sheet_path) as Texture2D
+	if src_tex == null:
+		return {}
+	var src: Image = src_tex.get_image()
+	if src == null:
+		return {}
+	if src.is_compressed():
+		src.decompress()
+	src.convert(Image.FORMAT_RGBA8)
+	var w := src.get_width()
+	var h := src.get_height()
+	var cw := w / 3
+	var ch := h / 3
+	if cw < 8 or ch < 8:
+		return {}
+
+	var crops: Array = []
+	for row in range(3):
+		for col in range(3):
+			var cell := src.get_region(Rect2i(col * cw, row * ch, cw, ch))
+			var bbox := _content_bbox(cell)
+			if bbox.size.x <= 0 or bbox.size.y <= 0:
+				var empty := Image.create(1, 1, false, Image.FORMAT_RGBA8)
+				empty.fill(Color(0, 0, 0, 0))
+				crops.append(empty)
+			else:
+				crops.append(cell.get_region(bbox))
+
+	var col_w: Array[int] = [
+		maxi(crops[0].get_width(), maxi(crops[3].get_width(), crops[6].get_width())),
+		maxi(crops[1].get_width(), maxi(crops[4].get_width(), crops[7].get_width())),
+		maxi(crops[2].get_width(), maxi(crops[5].get_width(), crops[8].get_width())),
+	]
+	var row_h: Array[int] = [
+		maxi(crops[0].get_height(), maxi(crops[1].get_height(), crops[2].get_height())),
+		maxi(crops[3].get_height(), maxi(crops[4].get_height(), crops[5].get_height())),
+		maxi(crops[6].get_height(), maxi(crops[7].get_height(), crops[8].get_height())),
+	]
+	var out_w := col_w[0] + col_w[1] + col_w[2]
+	var out_h := row_h[0] + row_h[1] + row_h[2]
+	var out := Image.create(out_w, out_h, false, Image.FORMAT_RGBA8)
+	out.fill(Color(0, 0, 0, 0))
+
+	var xs: Array[int] = [0, col_w[0], col_w[0] + col_w[1]]
+	var ys: Array[int] = [0, row_h[0], row_h[0] + row_h[1]]
+	for row in range(3):
+		for col in range(3):
+			var crop: Image = crops[row * 3 + col]
+			var cell_img := Image.create(col_w[col], row_h[row], false, Image.FORMAT_RGBA8)
+			var fill_c := _sample_fill_color(crop)
+			cell_img.fill(fill_c)
+			# Align toward outer edges so thin texture_margins keep the rim.
+			var ox := 0
+			var oy := 0
+			match col:
+				0:
+					ox = 0
+				1:
+					ox = (col_w[col] - crop.get_width()) / 2
+				2:
+					ox = col_w[col] - crop.get_width()
+			match row:
+				0:
+					oy = 0
+				1:
+					oy = (row_h[row] - crop.get_height()) / 2
+				2:
+					oy = row_h[row] - crop.get_height()
+			cell_img.blit_rect(crop, Rect2i(0, 0, crop.get_width(), crop.get_height()), Vector2i(ox, oy))
+			out.blit_rect(cell_img, Rect2i(0, 0, col_w[col], row_h[row]), Vector2i(xs[col], ys[row]))
+
+	var tex := ImageTexture.create_from_image(out)
+	var meta := {
+		"tex": tex,
+		"ml": col_w[0],
+		"mr": col_w[2],
+		"mt": row_h[0],
+		"mb": row_h[2],
+	}
+	_bake_cache[sheet_path] = meta
+	return meta
+
+
+static func _scale_texture(tex: ImageTexture, scale: float) -> ImageTexture:
+	var img := tex.get_image()
+	if img == null:
+		return tex
+	if img.is_compressed():
+		img.decompress()
+	var nw := maxi(1, int(round(float(img.get_width()) * scale)))
+	var nh := maxi(1, int(round(float(img.get_height()) * scale)))
+	img.resize(nw, nh, Image.INTERPOLATE_NEAREST)
+	return ImageTexture.create_from_image(img)
 
 
 static func _content_bbox(img: Image) -> Rect2i:
