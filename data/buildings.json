@@ -1,0 +1,114 @@
+{
+  "buildings": [
+    {
+      "id": "quarters",
+      "name": "Жилые кварталы",
+      "desc": "+слоты героев",
+      "max_level": 5,
+      "gold_base": 120,
+      "gold_per_level": 80,
+      "effect": "roster_slots",
+      "effect_per_level": 2
+    },
+    {
+      "id": "storage",
+      "name": "Хранилище",
+      "desc": "+продовольствие при улучшении",
+      "max_level": 5,
+      "gold_base": 80,
+      "gold_per_level": 50,
+      "effect": "food",
+      "effect_per_level": 20
+    },
+    {
+      "id": "arena",
+      "name": "Тренировочная арена",
+      "desc": "Тренировки героев и рост боевых навыков",
+      "max_level": 3,
+      "gold_base": 150,
+      "gold_per_level": 100,
+      "effect": "none",
+      "effect_per_level": 0
+    },
+    {
+      "id": "forge",
+      "name": "Кузница",
+      "desc": "Создание и улучшение оружия и брони",
+      "max_level": 3,
+      "gold_base": 200,
+      "gold_per_level": 120,
+      "effect": "fame",
+      "effect_per_level": 1
+    },
+    {
+      "id": "tavern",
+      "name": "Таверна",
+      "desc": "Лучший пул рекрутов при улучшении",
+      "max_level": 3,
+      "gold_base": 100,
+      "gold_per_level": 90,
+      "effect": "tavern",
+      "effect_per_level": 1
+    },
+    {
+      "id": "infirmary",
+      "name": "Лазарет",
+      "desc": "−1 день госпиталя за уровень",
+      "max_level": 3,
+      "gold_base": 140,
+      "gold_per_level": 100,
+      "effect": "hospital",
+      "effect_per_level": 1
+    },
+    {
+      "id": "library",
+      "name": "Архив знаний",
+      "desc": "Исследования, хроники и накопленные знания",
+      "max_level": 5,
+      "gold_base": 130,
+      "gold_per_level": 90,
+      "effect": "fame",
+      "effect_per_level": 1
+    },
+    {
+      "id": "laboratory",
+      "name": "Магическая лаборатория",
+      "desc": "Исследование магии и создание усилений",
+      "max_level": 5,
+      "gold_base": 220,
+      "gold_per_level": 140,
+      "effect": "mana",
+      "effect_per_level": 1
+    },
+    {
+      "id": "workshop",
+      "name": "Мастерская",
+      "desc": "Производство снаряжения и припасов",
+      "max_level": 5,
+      "gold_base": 160,
+      "gold_per_level": 100,
+      "effect": "food",
+      "effect_per_level": 5
+    },
+    {
+      "id": "inn",
+      "name": "Гостиница",
+      "desc": "Принимает гостей и приносит доход",
+      "max_level": 5,
+      "gold_base": 180,
+      "gold_per_level": 110,
+      "effect": "income",
+      "effect_per_level": 10
+    },
+    {
+      "id": "shop",
+      "name": "Лавка",
+      "desc": "Торговля ресурсами гильдии",
+      "max_level": 5,
+      "gold_base": 140,
+      "gold_per_level": 90,
+      "effect": "fame",
+      "effect_per_level": 1
+    }
+  ]
+}

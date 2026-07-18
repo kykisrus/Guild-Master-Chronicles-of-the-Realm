@@ -1,0 +1,431 @@
+{
+  "schema_version": "0.1",
+  "project": "Guild Master: Chronicles of the Realm",
+  "engine": "Godot 4",
+  "ui_shell": {
+    "scene": "res://ui/layouts/app_shell.tscn",
+    "persistent": [
+      "sidebar",
+      "top_bar",
+      "page_container",
+      "modal_layer",
+      "notification_layer",
+      "tooltip_layer"
+    ],
+    "sidebar": {
+      "collapsible": true,
+      "expanded_width": 240,
+      "collapsed_width": 72
+    },
+    "top_bar": {
+      "show_back": true,
+      "show_forward": true,
+      "show_date": true,
+      "show_guildmaster_portrait": true,
+      "show_end_day_button": true
+    }
+  },
+  "theme": {
+    "colors": {
+      "background_dark": "#11151D",
+      "background": "#171D27",
+      "panel": "#1F2733",
+      "panel_active": "#2A3443",
+      "border": "#394558",
+      "text_primary": "#F2F4F7",
+      "text_secondary": "#C8CFD9",
+      "text_muted": "#8D98A8",
+      "success": "#36D26E",
+      "info": "#2CB7D9",
+      "warning": "#F2B84B",
+      "danger": "#E65B5B",
+      "mana": "#8A63D2",
+      "craft": "#D9893C"
+    },
+    "rank_colors": {
+      "E": "#7F8A96",
+      "D": "#A7B0BA",
+      "C": "#43A4D8",
+      "B": "#36B675",
+      "A": "#C68CE6",
+      "S": "#F1BE4B",
+      "SS": "#FF7A45",
+      "SSS": "#FF4F7B"
+    }
+  },
+  "pages": [
+    {
+      "id": "main_menu",
+      "title": "Главное меню",
+      "route": "/main-menu",
+      "scene": "res://ui/pages/main_menu/main_menu.tscn",
+      "layout": "fullscreen",
+      "shell": false,
+      "components": [
+        "logo",
+        "background_scene",
+        "menu_buttons",
+        "save_slots"
+      ],
+      "actions": [
+        "new_game",
+        "continue",
+        "load_game",
+        "settings",
+        "credits",
+        "quit"
+      ]
+    },
+    {
+      "id": "create_guildmaster",
+      "title": "Создание Гильдмастера",
+      "route": "/new-game/guildmaster",
+      "scene": "res://ui/pages/guildmaster_create/guildmaster_create.tscn",
+      "layout": "three_column",
+      "shell": false,
+      "components": [
+        "generated_stats",
+        "identity_form",
+        "portrait_selector",
+        "randomize_controls"
+      ],
+      "actions": [
+        "randomize_stats",
+        "randomize_portrait",
+        "randomize_all",
+        "confirm",
+        "back",
+        "next"
+      ]
+    },
+    {
+      "id": "select_origin",
+      "title": "Выбор происхождения гильдии",
+      "route": "/new-game/origin",
+      "scene": "res://ui/pages/origin_select/origin_select.tscn",
+      "layout": "master_detail",
+      "shell": false,
+      "components": [
+        "origin_list",
+        "origin_details",
+        "starting_roster",
+        "starting_staff",
+        "difficulty_badge"
+      ],
+      "actions": [
+        "select_origin",
+        "back",
+        "start_game"
+      ]
+    },
+    {
+      "id": "dashboard",
+      "title": "Обзор",
+      "route": "/dashboard",
+      "scene": "res://ui/pages/dashboard/dashboard.tscn",
+      "layout": "dashboard",
+      "shell": true,
+      "sidebar_icon": "home",
+      "components": [
+        "guild_summary",
+        "guild_hall_view",
+        "resource_counters",
+        "mini_calendar",
+        "notifications",
+        "quick_actions"
+      ],
+      "actions": [
+        "open_building",
+        "create_squad",
+        "open_quests",
+        "open_recruiting",
+        "end_day"
+      ]
+    },
+    {
+      "id": "roster",
+      "title": "Герои",
+      "route": "/roster",
+      "scene": "res://ui/pages/roster/roster.tscn",
+      "layout": "card_grid",
+      "shell": true,
+      "sidebar_icon": "heroes",
+      "components": [
+        "roster_summary",
+        "hero_filters",
+        "hero_card_grid",
+        "bench_section"
+      ],
+      "actions": [
+        "open_hero",
+        "assign_to_squad",
+        "send_to_training",
+        "start_rank_exam"
+      ]
+    },
+    {
+      "id": "hero_details",
+      "title": "Карточка героя",
+      "route": "/roster/:hero_id",
+      "scene": "res://ui/pages/hero_details/hero_details.tscn",
+      "layout": "detail",
+      "shell": true,
+      "components": [
+        "hero_identity",
+        "attributes",
+        "weapon_skills",
+        "magic_schools",
+        "preferences",
+        "relationships",
+        "equipment",
+        "history"
+      ],
+      "actions": [
+        "assign_to_squad",
+        "send_to_training",
+        "start_exam",
+        "start_personal_quest",
+        "dismiss"
+      ]
+    },
+    {
+      "id": "recruiting",
+      "title": "Рекрутинг",
+      "route": "/recruiting",
+      "scene": "res://ui/pages/recruiting/recruiting.tscn",
+      "layout": "table",
+      "shell": true,
+      "sidebar_icon": "recruiting",
+      "tabs": [
+        "tavern",
+        "guild_board",
+        "faction_contacts",
+        "special_search",
+        "my_negotiations"
+      ],
+      "components": [
+        "candidate_filters",
+        "candidate_table",
+        "candidate_preview"
+      ],
+      "actions": [
+        "inspect_candidate",
+        "start_exam",
+        "make_offer",
+        "cancel_negotiation"
+      ]
+    },
+    {
+      "id": "squads",
+      "title": "Отряды",
+      "route": "/squads",
+      "scene": "res://ui/pages/squads/squads.tscn",
+      "layout": "three_column",
+      "shell": true,
+      "sidebar_icon": "squads",
+      "components": [
+        "squad_list",
+        "squad_slots",
+        "available_heroes",
+        "quest_assignment",
+        "success_forecast"
+      ],
+      "actions": [
+        "create_squad",
+        "rename_squad",
+        "drag_hero",
+        "auto_fill",
+        "assign_quest",
+        "dispatch"
+      ]
+    },
+    {
+      "id": "quests",
+      "title": "Квесты",
+      "route": "/quests",
+      "scene": "res://ui/pages/quests/quests.tscn",
+      "layout": "calendar_list",
+      "shell": true,
+      "sidebar_icon": "quests",
+      "tabs": [
+        "available",
+        "active",
+        "completed",
+        "failed",
+        "epic"
+      ],
+      "components": [
+        "quest_calendar",
+        "quest_list",
+        "quest_card",
+        "quest_filters"
+      ],
+      "actions": [
+        "open_quest",
+        "assign_squad",
+        "track_quest",
+        "view_report"
+      ]
+    },
+    {
+      "id": "tactics",
+      "title": "Тактики",
+      "route": "/tactics",
+      "scene": "res://ui/pages/tactics/tactics.tscn",
+      "layout": "map_options",
+      "shell": true,
+      "sidebar_icon": "tactics",
+      "components": [
+        "battle_map",
+        "tactic_presets",
+        "rule_groups",
+        "tactic_summary"
+      ],
+      "actions": [
+        "place_marker",
+        "toggle_rule",
+        "playtest",
+        "save",
+        "discard",
+        "apply_to_squad"
+      ]
+    },
+    {
+      "id": "tournaments",
+      "title": "Турниры",
+      "route": "/tournaments",
+      "scene": "res://ui/pages/tournaments/tournaments.tscn",
+      "layout": "calendar_list",
+      "shell": true,
+      "sidebar_icon": "trophy",
+      "tabs": [
+        "registration",
+        "ongoing",
+        "upcoming",
+        "completed"
+      ],
+      "components": [
+        "tournament_calendar",
+        "tournament_list",
+        "tournament_card"
+      ],
+      "actions": [
+        "open_tournament",
+        "register_squad",
+        "withdraw",
+        "view_bracket"
+      ]
+    },
+    {
+      "id": "world_map",
+      "title": "Карта мира",
+      "route": "/world",
+      "scene": "res://ui/pages/world_map/world_map.tscn",
+      "layout": "map_details",
+      "shell": true,
+      "sidebar_icon": "map",
+      "components": [
+        "interactive_map",
+        "map_layers",
+        "region_details",
+        "faction_reputation",
+        "travel_info"
+      ],
+      "actions": [
+        "select_region",
+        "toggle_layer",
+        "open_region_quests",
+        "travel"
+      ]
+    },
+    {
+      "id": "guild_hall",
+      "title": "Гильд-холл",
+      "route": "/guild-hall",
+      "scene": "res://ui/pages/guild_hall/guild_hall.tscn",
+      "layout": "visual_management",
+      "shell": true,
+      "sidebar_icon": "base",
+      "components": [
+        "guild_hall_view",
+        "building_hotspots",
+        "building_details",
+        "construction_queue"
+      ],
+      "actions": [
+        "open_building",
+        "upgrade_building",
+        "assign_staff",
+        "start_construction"
+      ]
+    },
+    {
+      "id": "finances",
+      "title": "Финансы",
+      "route": "/finances",
+      "scene": "res://ui/pages/finances/finances.tscn",
+      "layout": "analytics",
+      "shell": true,
+      "sidebar_icon": "finance",
+      "tabs": [
+        "overview",
+        "salaries",
+        "quests",
+        "construction",
+        "trade",
+        "craft",
+        "history"
+      ],
+      "components": [
+        "finance_summary",
+        "cashflow_chart",
+        "forecast",
+        "transaction_table",
+        "warnings"
+      ],
+      "actions": [
+        "change_period",
+        "filter_transactions",
+        "open_transaction"
+      ]
+    },
+    {
+      "id": "journal",
+      "title": "Журнал",
+      "route": "/journal",
+      "scene": "res://ui/pages/journal/journal.tscn",
+      "layout": "feed",
+      "shell": true,
+      "sidebar_icon": "journal",
+      "tabs": [
+        "mail",
+        "daily_log",
+        "quest_reports",
+        "world_events",
+        "guild_history"
+      ],
+      "components": [
+        "message_list",
+        "event_feed",
+        "event_details",
+        "filters"
+      ],
+      "actions": [
+        "open_message",
+        "mark_read",
+        "archive",
+        "open_related_object"
+      ]
+    }
+  ],
+  "shared_components": {
+    "hero_card": "res://ui/components/hero_card.tscn",
+    "quest_card": "res://ui/components/quest_card.tscn",
+    "building_card": "res://ui/components/building_card.tscn",
+    "status_badge": "res://ui/components/status_badge.tscn",
+    "resource_counter": "res://ui/components/resource_counter.tscn",
+    "modal_window": "res://ui/components/modal_window.tscn",
+    "tooltip": "res://ui/components/tooltip.tscn",
+    "table_header": "res://ui/components/table_header.tscn"
+  }
+}

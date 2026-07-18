@@ -1,0 +1,66 @@
+{
+  "warrior": {
+    "id": "warrior",
+    "name": "Воин",
+    "primary_stats": ["str", "con"],
+    "combat_weight": 1.2,
+    "gathering_weight": 0.7,
+    "escort_weight": 1.0
+  },
+  "archer": {
+    "id": "archer",
+    "name": "Лучник",
+    "primary_stats": ["dex", "wis"],
+    "combat_weight": 1.1,
+    "gathering_weight": 1.0,
+    "escort_weight": 0.9
+  },
+  "mage": {
+    "id": "mage",
+    "name": "Маг",
+    "primary_stats": ["int", "wis"],
+    "combat_weight": 1.15,
+    "gathering_weight": 0.8,
+    "escort_weight": 0.85
+  },
+  "acolyte": {
+    "id": "acolyte",
+    "name": "Послушник",
+    "primary_stats": ["wis", "cha"],
+    "combat_weight": 0.9,
+    "gathering_weight": 0.9,
+    "escort_weight": 1.15
+  },
+  "summoner": {
+    "id": "summoner",
+    "name": "Призыватель",
+    "primary_stats": ["int", "cha"],
+    "combat_weight": 1.05,
+    "gathering_weight": 0.95,
+    "escort_weight": 1.0
+  },
+  "rogue": {
+    "id": "rogue",
+    "name": "Разбойник",
+    "primary_stats": ["dex", "cha"],
+    "combat_weight": 1.1,
+    "gathering_weight": 1.05,
+    "escort_weight": 0.85
+  },
+  "druid": {
+    "id": "druid",
+    "name": "Друид",
+    "primary_stats": ["wis", "con"],
+    "combat_weight": 1.0,
+    "gathering_weight": 1.2,
+    "escort_weight": 0.95
+  },
+  "bard": {
+    "id": "bard",
+    "name": "Бард",
+    "primary_stats": ["cha", "dex"],
+    "combat_weight": 0.85,
+    "gathering_weight": 0.95,
+    "escort_weight": 1.25
+  }
+}

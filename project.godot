@@ -1,0 +1,32 @@
+; Engine configuration file.
+; Godot 4.x — Guild Master: Chronicles of the Realm
+
+config_version=5
+
+[application]
+
+config/name="Guild Master: Chronicles of the Realm"
+config/description="Guild management RPG prototype"
+run/main_scene="res://scenes/ui/intro_splash.tscn"
+config/features=PackedStringArray("4.3", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+Settings="*res://autoload/settings.gd"
+GameState="*res://autoload/game_state.gd"
+TimeSystem="*res://autoload/time_system.gd"
+SaveLoad="*res://autoload/save_load.gd"
+MusicController="*res://autoload/music_controller.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+textures/canvas_textures/default_texture_filter=0

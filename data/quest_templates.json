@@ -1,0 +1,82 @@
+{
+  "templates": [
+    {
+      "id": "bandit_camp",
+      "name": "Зачистка лагеря разбойников",
+      "type": "combat",
+      "difficulty": 1,
+      "gold_min": 60,
+      "gold_max": 120,
+      "fame_min": 1,
+      "fame_max": 3,
+      "mana_chance": 0.15
+    },
+    {
+      "id": "monster_pack",
+      "name": "Уничтожение стаи монстров",
+      "type": "combat",
+      "difficulty": 2,
+      "gold_min": 90,
+      "gold_max": 180,
+      "fame_min": 2,
+      "fame_max": 5,
+      "mana_chance": 0.25
+    },
+    {
+      "id": "herb_gather",
+      "name": "Сбор редких трав",
+      "type": "gathering",
+      "difficulty": 1,
+      "gold_min": 40,
+      "gold_max": 80,
+      "fame_min": 0,
+      "fame_max": 1,
+      "mana_chance": 0.1
+    },
+    {
+      "id": "ore_mine",
+      "name": "Добыча руды у опасного ущелья",
+      "type": "gathering",
+      "difficulty": 2,
+      "gold_min": 70,
+      "gold_max": 130,
+      "fame_min": 1,
+      "fame_max": 2,
+      "mana_chance": 0.2
+    },
+    {
+      "id": "caravan",
+      "name": "Сопровождение торгового каравана",
+      "type": "escort",
+      "difficulty": 1,
+      "gold_min": 80,
+      "gold_max": 140,
+      "fame_min": 1,
+      "fame_max": 3,
+      "mana_chance": 0.1
+    },
+    {
+      "id": "vip_escort",
+      "name": "Защита важного NPC",
+      "type": "escort",
+      "difficulty": 2,
+      "gold_min": 100,
+      "gold_max": 200,
+      "fame_min": 2,
+      "fame_max": 4,
+      "mana_chance": 0.2
+    },
+    {
+      "id": "combo_scout_fight",
+      "name": "Разведка и зачистка аномалии",
+      "type": "combat",
+      "tags": ["combat", "gathering"],
+      "difficulty": 3,
+      "gold_min": 150,
+      "gold_max": 280,
+      "fame_min": 3,
+      "fame_max": 6,
+      "mana_chance": 0.4
+    }
+  ]
+}

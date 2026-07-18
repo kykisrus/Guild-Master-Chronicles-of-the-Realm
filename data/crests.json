@@ -1,0 +1,65 @@
+{
+  "shields": [
+    {"id": "heater", "name": "Рыцарский"},
+    {"id": "french", "name": "Французский"},
+    {"id": "kite", "name": "Каплевидный"},
+    {"id": "round", "name": "Круглый"},
+    {"id": "banner", "name": "Знамя"},
+    {"id": "dwarven", "name": "Дварфский"}
+  ],
+  "emblems": [
+    {"id": "lion", "name": "Лев", "category": "animals"},
+    {"id": "wolf", "name": "Волк", "category": "animals"},
+    {"id": "dragon", "name": "Дракон", "category": "animals"},
+    {"id": "eagle", "name": "Орёл", "category": "animals"},
+    {"id": "stag", "name": "Олень", "category": "animals"},
+    {"id": "raven", "name": "Ворон", "category": "animals"},
+    {"id": "serpent", "name": "Змей", "category": "animals"},
+    {"id": "griffin", "name": "Грифон", "category": "animals"},
+    {"id": "sword", "name": "Меч", "category": "military"},
+    {"id": "cross", "name": "Крест", "category": "religious"},
+    {"id": "tower", "name": "Башня", "category": "military"},
+    {"id": "helm", "name": "Шлем", "category": "military"},
+    {"id": "star", "name": "Звезда", "category": "magic"},
+    {"id": "flame", "name": "Пламя", "category": "magic"},
+    {"id": "moon", "name": "Луна", "category": "magic"},
+    {"id": "sun", "name": "Солнце", "category": "magic"},
+    {"id": "tree", "name": "Древо", "category": "nature"},
+    {"id": "anvil", "name": "Наковальня", "category": "craft"},
+    {"id": "crown", "name": "Корона", "category": "noble"},
+    {"id": "fleur", "name": "Лилия", "category": "noble"}
+  ],
+  "patterns": [
+    {"id": "solid", "name": "Чистое поле"},
+    {"id": "per_pale", "name": "Вертикальное"},
+    {"id": "per_fess", "name": "Горизонтальное"},
+    {"id": "bend", "name": "Диагональное"},
+    {"id": "bend_sinister", "name": "Обратная диагональ"},
+    {"id": "quarterly", "name": "Четверочастный"},
+    {"id": "chevron", "name": "Шеврон"},
+    {"id": "cross_field", "name": "Крест"},
+    {"id": "saltire", "name": "Косой крест"},
+    {"id": "chief", "name": "Верхняя глава"},
+    {"id": "base", "name": "Нижняя часть"},
+    {"id": "bordure", "name": "Кайма"}
+  ],
+  "borders": [
+    {"id": "gold_simple", "name": "Золотая"},
+    {"id": "silver_simple", "name": "Серебряная"},
+    {"id": "iron_simple", "name": "Железная"},
+    {"id": "none", "name": "Без рамки"}
+  ],
+  "colors": [
+    {"id": "crimson", "name": "Багряный", "hex": "#9E2F35", "group": "color"},
+    {"id": "royal_blue", "name": "Королевский синий", "hex": "#294F87", "group": "color"},
+    {"id": "forest", "name": "Лесной зелёный", "hex": "#315F43", "group": "color"},
+    {"id": "gold", "name": "Золото", "hex": "#C59413", "group": "metal"},
+    {"id": "violet", "name": "Пурпурный", "hex": "#665080", "group": "color"},
+    {"id": "silver", "name": "Серебро", "hex": "#AAB3BE", "group": "metal"},
+    {"id": "bronze", "name": "Бронза", "hex": "#936331", "group": "color"},
+    {"id": "black", "name": "Чёрный", "hex": "#1C2430", "group": "color"},
+    {"id": "teal", "name": "Бирюзовый", "hex": "#236A70", "group": "color"},
+    {"id": "wine", "name": "Бордовый", "hex": "#713047", "group": "color"},
+    {"id": "ivory", "name": "Слоновая кость", "hex": "#E8E0CA", "group": "metal"}
+  ]
+}
