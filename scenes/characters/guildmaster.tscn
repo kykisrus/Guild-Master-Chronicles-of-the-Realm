@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/characters/guildmaster.gd" id="1"]
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/tiny_swords/unit_warrior_blue.tres" id="2"]
+
+[node name="Guildmaster" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+sprite_frames = ExtResource("2")
+animation = &"idle"
+autoplay = "idle"
+offset = Vector2(0, -64)

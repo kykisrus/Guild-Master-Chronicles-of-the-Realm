@@ -37,3 +37,70 @@ settings.windowed,Оконный режим
 settings.resolution,Разрешение
 settings.language_ru,Русский
 credits.title,Авторы
+intro.skip,Пропустить
+intro.skip_confirm,"Пропустить вступление? Вы сразу перейдёте к представлению Гильдмастера."
+intro.abandoned_barracks,Заброшенная казарма
+intro.dialogue_continue,Продолжить…
+intro.ask_me,О чём хочешь спросить?
+intro.gm_castle_line,"И это моя гильдия? Я думал, тут будет замок."
+intro.thief_first_line,"Замки появляются позже. Сначала у всех есть крыша, стены и слишком большие планы."
+intro.gm_who_are_you,А ты кто?
+intro.thief_caretaker,"Скажем так: временный смотритель. Проверял, не осталось ли здесь чего-нибудь полезного."
+intro.gm_anything_left,И осталось?
+intro.thief_almost_nothing,Теперь уже почти ничего.
+intro.thief_explain_cycle,"Герой приходит в гильдию. Ты нанимаешь героев, собираешь отряды и отправляешь их на задания. Задания дают золото, славу и ресурсы. Здания и сотрудники открывают новые возможности. Ты принимаешь решения — прямого управления героями нет."
+intro.question.hire_heroes,Как нанимать героев?
+intro.question.quests,Как работают задания?
+intro.question.staff,Зачем нужны сотрудники?
+intro.question.guild_growth,Как развивать гильдию?
+intro.question.failure,Что будет, если всё пойдёт плохо?
+intro.question.world,Расскажи о мире.
+intro.question.ready,Я готов.
+intro.answer.hire_heroes,"Герои сами приходят в зал. Ты решаешь, кого принять — и на каких условиях."
+intro.answer.quests,"Задания появляются на доске. Отряд уходит, возвращается с добычей — или с проблемами."
+intro.answer.staff,"Сотрудники снимают рутину: встречают гостей, следят за бумагами, подсказывают срочное."
+intro.answer.guild_growth,"Строй залы, копи ресурсы, расширяй влияние. Сначала — крыша над головой, потом — амбиции."
+intro.answer.failure,"Долги, пустая казна, недовольные герои. Главное — вовремя заметить, что дело пахнет жареным."
+intro.answer.world,"Королевство полно заказов, данжей и чужих амбиций. Гильдии — мост между проблемами и теми, кто их решает."
+intro.ready_prompt,"Ну что, готов создать свою гильдию?"
+intro.choice.more_questions,У меня есть ещё вопросы.
+intro.thief_farewell,"Что ж, теперь это официально. Удачи тебе, Гильдмастер. Она понадобится."
+gm_registration.title,Регистрационная форма Гильдмастера
+gm_registration.first_name,Имя
+gm_registration.last_name,Фамилия
+gm_registration.age,Возраст
+gm_registration.origin,Происхождение
+gm_registration.origin.city,Городской житель
+gm_registration.origin.military,Военная семья
+gm_registration.origin.trade,Торговая семья
+gm_registration.origin.rural,Сельские земли
+gm_registration.origin.noble,Обедневший дворянский род
+gm_registration.origin.wanderer,Странник
+gm_registration.error_required,Укажите имя и фамилию.
+gm_registration.error_length,Имя и фамилия — не длиннее 24 символов.
+gm_registration.error_age,Возраст должен быть от 18 до 80.
+gm_registration.error_origin,Выберите происхождение.
+guild_creation.title,Создание гильдии
+guild_creation.name,Название гильдии
+guild_creation.palette,Цвет гильдии
+guild_creation.palette.blue,Синий
+guild_creation.palette.red,Красный
+guild_creation.palette.black,Чёрный
+guild_creation.palette.yellow,Жёлтый
+guild_creation.palette.purple,Фиолетовый
+guild_creation.confirm,Основать гильдию «%s»?
+guild_creation.found,Основать
+guild_creation.founded,Гильдия «%s» основана.
+guild_creation.error_name,Название: от 3 до 32 символов.
+hub.resources_stub,"Золото %d · Еда %d · Материалы %d · Мана %d · Слава %d"
+hub.day,День %d
+hub.end_day,Закончить день
+hub.later,Позже.
+hub.section,Раздел
+hub.section_later,Раздел будет доступен позже.
+hub.nav.guild,Гильдия
+hub.nav.heroes,Герои
+hub.nav.parties,Отряды
+hub.nav.quests,Задания
+hub.nav.build,Строительство
+hub.nav.world,Карта мира

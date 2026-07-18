@@ -2,6 +2,7 @@ extends Control
 
 const MENU_SCENE := "res://scenes/menu/main_menu.tscn"
 const CONFIRM_SCENE := "res://scenes/menu/confirmation_dialog.tscn"
+const HUB_SCENE := "res://scenes/guild_hub/guild_hub.tscn"
 
 @onready var slots_box: VBoxContainer = %SlotsBox
 @onready var btn_back: Button = %BtnBack
@@ -57,6 +58,14 @@ func _make_slot_row(slot: int) -> Control:
 
 	var meta := SaveLoad.slot_metadata(slot)
 	if not meta.is_empty():
+		var gname := str(meta.get("guild_name", ""))
+		if gname.is_empty() and typeof(meta.get("guild", null)) == TYPE_DICTIONARY:
+			gname = str(meta["guild"].get("name", ""))
+		if not gname.is_empty():
+			var g_l := Label.new()
+			g_l.text = gname
+			g_l.add_theme_font_size_override("font_size", 14)
+			info.add_child(g_l)
 		var saved_at := str(meta.get("saved_at", ""))
 		if not saved_at.is_empty():
 			var date_l := Label.new()
@@ -98,8 +107,12 @@ func _make_slot_row(slot: int) -> Control:
 	return panel
 
 
-func _on_load_pressed(_slot: int) -> void:
-	_show_info(tr("menu.load"), tr("menu.load_campaign_popup"))
+func _on_load_pressed(slot: int) -> void:
+	var err := SaveLoad.load_campaign(slot)
+	if err != "":
+		_show_info(tr("menu.load"), err)
+		return
+	get_tree().change_scene_to_file(HUB_SCENE)
 
 
 func _on_delete_pressed(slot: int) -> void:

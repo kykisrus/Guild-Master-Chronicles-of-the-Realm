@@ -3,6 +3,7 @@ extends Control
 const LOAD_SCENE := "res://scenes/menu/load_menu.tscn"
 const SETTINGS_SCENE := "res://scenes/menu/settings_menu.tscn"
 const CREDITS_SCENE := "res://scenes/menu/credits_menu.tscn"
+const INTRO_SCENE := "res://scenes/intro/intro_field.tscn"
 
 @onready var title_label: Label = %TitleLabel
 @onready var btn_new: Button = %BtnNew
@@ -36,7 +37,7 @@ func _refresh_texts() -> void:
 
 
 func _on_new() -> void:
-	_show_info(tr("menu.new_game"), tr("menu.new_game_popup"))
+	get_tree().change_scene_to_file(INTRO_SCENE)
 
 
 func _on_load() -> void:
