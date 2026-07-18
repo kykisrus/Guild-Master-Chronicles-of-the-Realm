@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/tiny_swords/buildings/blue/Castle.png" id="1"]
+
+[node name="BuildingPreview" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1")
+offset = Vector2(0, -128)

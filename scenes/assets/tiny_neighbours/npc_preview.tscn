@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="SpriteFrames" path="res://resources/sprite_frames/tiny_neighbours/npc_01.tres" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/assets/tiny_neighbours/npc_emotion.tscn" id="2"]
+
+[node name="NpcPreview" type="Node2D"]
+
+[node name="Body" type="AnimatedSprite2D" parent="."]
+scale = Vector2(3, 3)
+sprite_frames = ExtResource("1")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="NpcEmotion" parent="." instance=ExtResource("2")]
+position = Vector2(0, -56)

@@ -34,6 +34,27 @@
 
 ---
 
+## Игровые Tiny-ассеты (Этап 2)
+
+- **Tiny Swords (Free Pack)** — автор **Pixel Frog**  
+  Назначение: Guild Hub, внешний мир, юниты, здания, terrain, FX.  
+  Путь: `res://assets/tiny_swords/`  
+  Примечание: в поставке пакета отдельный LICENSE-файл отсутствовал; использовать согласно условиям покупки на itch.io.
+
+- **Tiny Neighbours Vol.1** — автор **Vryell** (@Vryell)  
+  Назначение: NPC, эмоции, интерьерные персонажи.  
+  Путь: `res://assets/tiny_neighbours/`  
+  Благодарности: `docs/licenses/Tiny_Neighbours_Thanks.txt`
+
+- **Kings and Pigs** — автор **Pixel Frog** (типичная атрибуция пакета)  
+  Назначение: side-view интерьеры, Human King / Pig, двери, TileSet.  
+  Путь: `res://assets/kings_and_pigs/`  
+  Примечание: в поставке пакета отдельный LICENSE-файл отсутствовал; сверить условия itch.io перед публикацией.
+
+Каталог идентификаторов: `docs/assets/TINY_ASSET_CATALOG.md`
+
+---
+
 ## Музыка и звук
 
 - Интро-звук компании: `res://assets/company/intro.wav`
@@ -52,4 +73,4 @@
 
 ## Прочее
 
-Полный список игровых систем и ассетов последующих этапов будет дополняться по мере подключения Tiny Swords, Tiny Neighbours и Kings and Pigs.
+Dev-галерея ассетов: `res://scenes/dev/asset_gallery.tscn` (не входит в пользовательский маршрут).
