@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" load_steps=13 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/kings_and_pigs/doors/Closiong (46x56).png" id="1_tex"]
+[ext_resource type="Texture2D" path="res://assets/kings_and_pigs/doors/Idle.png" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/kings_and_pigs/doors/Opening (46x56).png" id="3_tex"]
+
+[sub_resource type="AtlasTexture" id="Atlas_1"]
+atlas = ExtResource("1_tex")
+region = Rect2(0, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_2"]
+atlas = ExtResource("1_tex")
+region = Rect2(46, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_3"]
+atlas = ExtResource("1_tex")
+region = Rect2(92, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_4"]
+atlas = ExtResource("2_tex")
+region = Rect2(0, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_5"]
+atlas = ExtResource("3_tex")
+region = Rect2(0, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_6"]
+atlas = ExtResource("3_tex")
+region = Rect2(46, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_7"]
+atlas = ExtResource("3_tex")
+region = Rect2(92, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_8"]
+atlas = ExtResource("3_tex")
+region = Rect2(138, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="Atlas_9"]
+atlas = ExtResource("3_tex")
+region = Rect2(184, 0, 46, 56)
+
+[resource]
+animations = [{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_1")}, {"duration": 1.0, "texture": SubResource("Atlas_2")}, {"duration": 1.0, "texture": SubResource("Atlas_3")}], "loop": true, "name": &"closing", "speed": 8.0}, {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_4")}], "loop": true, "name": &"closed", "speed": 8.0}, {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_5")}, {"duration": 1.0, "texture": SubResource("Atlas_6")}, {"duration": 1.0, "texture": SubResource("Atlas_7")}, {"duration": 1.0, "texture": SubResource("Atlas_8")}, {"duration": 1.0, "texture": SubResource("Atlas_9")}], "loop": true, "name": &"opening", "speed": 8.0}]

@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/tiny_neighbours/emotions/Exclamation_emote_16x16.png" id="1_tex"]
+
+[sub_resource type="AtlasTexture" id="Atlas_1"]
+atlas = ExtResource("1_tex")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Atlas_2"]
+atlas = ExtResource("1_tex")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Atlas_3"]
+atlas = ExtResource("1_tex")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Atlas_4"]
+atlas = ExtResource("1_tex")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+animations = [{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_1")}, {"duration": 1.0, "texture": SubResource("Atlas_2")}, {"duration": 1.0, "texture": SubResource("Atlas_3")}, {"duration": 1.0, "texture": SubResource("Atlas_4")}], "loop": true, "name": &"exclamation", "speed": 6.0}]
