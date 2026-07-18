@@ -24,18 +24,13 @@
 
 ## Шрифт интерфейса
 
-- **Pixelify Sans** — автор **Stefie Justprince** / [Pixelify Sans Project](https://github.com/eifetx/Pixelify-Sans)  
+- **Pix Cyrillic** (A Short Hike Edition) — форк [Pixellari](https://github.com/zedseven/Pixellari) с кириллицей  
+  Авторы: **zedseven** (оригинал), **lotva** (кириллика)  
   Лицензия: SIL Open Font License 1.1  
-  Файлы: `res://assets/fonts/ui/PixelifySans-Regular.ttf`, `PixelifySans-Bold.ttf`  
-  Лицензия: `res://assets/fonts/licenses/PixelifySans_OFL.txt`  
-  Назначение: основной UI-шрифт (кириллица, включая Ё/ё).  
-  Источник: https://fonts.google.com/specimen/Pixelify+Sans
-
-- **Galmuri11** — автор **quiple** (fallback)  
-  Лицензия: SIL Open Font License 1.1  
-  Файл: `res://assets/fonts/ui/Galmuri11.ttf`  
-  Назначение: запасной шрифт для глифов, отсутствующих в Pixelify Sans (заглавные кириллические **О** и **П**).  
-  Источник: https://github.com/quiple/galmuri
+  Файл: `res://assets/fonts/ui/PixCyrillic-AShortHikeEdition.ttf`  
+  Лицензия: `res://assets/fonts/licenses/PixCyrillic_OFL.txt`  
+  Назначение: основной UI-шрифт (русский, украинский, белорусский; Ё/ё; полные заглавные).  
+  Источник: https://github.com/lotva/pix-cyrillic
 
 ---
 
