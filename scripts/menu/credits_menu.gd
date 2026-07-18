@@ -30,5 +30,5 @@ func _fallback_credits() -> String:
 		"Автор: Kuk Bakharev / AMS",
 		"Движок: Godot Engine",
 		"UI: Tiny GUI Pack (Vryell)",
-		"Шрифт: Galmuri11 (quiple, OFL)",
+		"Шрифт: Pix Cyrillic (zedseven / lotva, OFL)",
 	])
