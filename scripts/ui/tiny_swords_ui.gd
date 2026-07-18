@@ -35,13 +35,49 @@ static func style_from_sheet(path: String, content_margin := 18, max_tex_margin 
 	return box
 
 
-## Horizontal bar (LineEdit / TopBar): middle row only, no vertical 9-slice crush.
+## Compact framed bar for LineEdit / TopBar: full 9-slice with thin top/bottom rim.
 static func style_horizontal_bar(path: String, content_margin := 8, max_side_margin := 12) -> StyleBoxTexture:
 	var box := StyleBoxTexture.new()
-	var meta := _bake_middle_row_meta(path)
+	var meta := _bake_meta(path)
 	if meta.is_empty():
-		return style_from_sheet(path, content_margin, max_side_margin)
-	_apply_meta_to_stylebox(box, meta, content_margin, max_side_margin, true)
+		return box
+	var tex: ImageTexture = meta["tex"]
+	var ml := int(meta["ml"])
+	var mr := int(meta["mr"])
+	var mt := int(meta["mt"])
+	var mb := int(meta["mb"])
+	# Fit to ~36px so a LineEdit can show top+bottom frame without shredding.
+	const TARGET_H := 36.0
+	const MAX_V_MARGIN := 6
+	var th := float(tex.get_height())
+	if th > TARGET_H:
+		var vscale := TARGET_H / th
+		tex = _scale_texture(tex, vscale)
+		ml = maxi(1, int(round(float(ml) * vscale)))
+		mr = maxi(1, int(round(float(mr) * vscale)))
+		mt = maxi(1, int(round(float(mt) * vscale)))
+		mb = maxi(1, int(round(float(mb) * vscale)))
+	if max_side_margin > 0:
+		ml = clampi(ml, 1, max_side_margin)
+		mr = clampi(mr, 1, max_side_margin)
+	mt = clampi(mt, 2, MAX_V_MARGIN)
+	mb = clampi(mb, 2, MAX_V_MARGIN)
+	# Ensure top+bottom leave room for a wood center on typical LineEdit heights.
+	var tex_h := tex.get_height()
+	if mt + mb >= tex_h:
+		mt = maxi(2, tex_h / 4)
+		mb = maxi(2, tex_h / 4)
+	box.texture = tex
+	box.texture_margin_left = ml
+	box.texture_margin_right = mr
+	box.texture_margin_top = mt
+	box.texture_margin_bottom = mb
+	box.content_margin_left = content_margin
+	box.content_margin_right = content_margin
+	box.content_margin_top = maxi(content_margin / 2, 4)
+	box.content_margin_bottom = maxi(content_margin / 2, 4)
+	box.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	box.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
 	return box
 
 

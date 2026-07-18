@@ -22,10 +22,11 @@ func _run() -> void:
 
 	var bar: StyleBoxTexture = TinySwordsUi.style_horizontal_bar(TinySwordsUi.WOOD_TABLE, 8, 12)
 	assert(bar.texture != null, "wood bar null")
-	assert(is_equal_approx(bar.texture_margin_top, 0.0), "bar must not 9-slice vertically")
+	assert(bar.texture_margin_top >= 2.0, "bar missing top frame")
+	assert(bar.texture_margin_bottom >= 2.0, "bar missing bottom frame")
 	assert(bar.texture_margin_left <= 12.0 + 0.5, "bar side margin capped")
 	assert(bar.texture.get_height() >= 24, "wood bar too short")
-	print("Wood bar OK h=", bar.texture.get_height(), " ml=", bar.texture_margin_left)
+	print("Wood bar OK h=", bar.texture.get_height(), " mt=", bar.texture_margin_top, " mb=", bar.texture_margin_bottom)
 
 	var btn_bake: ImageTexture = TinySwordsUi.bake_seamless_panel(TinySwordsUi.BTN_BLUE)
 	assert(btn_bake != null, "bake button null")
