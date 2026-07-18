@@ -66,6 +66,7 @@ intro.ready_prompt,"Ну что, готов создать свою гильди
 intro.choice.more_questions,У меня есть ещё вопросы.
 intro.thief_farewell,"Что ж, теперь это официально. Удачи тебе, Гильдмастер. Она понадобится."
 gm_registration.title,Регистрация Гильдмастера
+gm_registration.subtitle,Представьтесь королевству
 gm_registration.name,Имя
 gm_registration.class,Класс
 gm_registration.class.warrior,Воин

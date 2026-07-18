@@ -6,7 +6,8 @@ const GM_SCENE := "res://scenes/characters/guildmaster.tscn"
 const DOOR_SCENE := "res://scenes/assets/kings_and_pigs/basic_door.tscn"
 const DIALOGUE_SCENE := "res://scenes/ui/dialogue/dialogue_box.tscn"
 const DIALOGUE_DATA := "res://data/intro/thief_dialogue.json"
-const PIG_FRAMES := "res://resources/sprite_frames/kings_and_pigs/pig.tres"
+## Human Tiny Neighbours NPC (not Kap Pig — that was only a temporary interior placeholder).
+const THIEF_FRAMES := "res://resources/sprite_frames/tiny_neighbours/npc_07.tres"
 const ROOM_W := 960.0
 const ROOM_H := 540.0
 
@@ -61,13 +62,16 @@ func _build_room() -> void:
 
 	_thief = AnimatedSprite2D.new()
 	_thief.name = "ThiefPronyra"
-	if ResourceLoader.exists(PIG_FRAMES):
-		_thief.sprite_frames = load(PIG_FRAMES) as SpriteFrames
+	if ResourceLoader.exists(THIEF_FRAMES):
+		_thief.sprite_frames = load(THIEF_FRAMES) as SpriteFrames
 		if _thief.sprite_frames.has_animation(&"idle"):
 			_thief.play(&"idle")
-	_thief.position = Vector2(620, 340)
+		elif _thief.sprite_frames.has_animation(&"walk"):
+			_thief.play(&"walk")
+	_thief.position = Vector2(620, 360)
 	_thief.flip_h = true
-	_thief.scale = Vector2(3.0, 3.0)
+	# Neighbours sprites are ~32x52; scale up for Kap interior camera.
+	_thief.scale = Vector2(2.5, 2.5)
 	world.add_child(_thief)
 
 

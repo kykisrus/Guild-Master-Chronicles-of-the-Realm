@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/intro/guildmaster_registration.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/tiny_gui/panels/Split/Popup_Window_Brown_16x16.png" id="2"]
 
 [node name="GuildmasterRegistration" type="Control"]
 layout_mode = 3
@@ -18,7 +19,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.12, 0.1, 0.08, 1)
+color = Color(0.08, 0.06, 0.05, 1)
+
+[node name="Vignette" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.05, 0.03, 0.02, 0.35)
 
 [node name="Center" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -28,68 +39,115 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(440, 280)
+[node name="Card" type="NinePatchRect" parent="Center"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(720, 360)
 layout_mode = 2
+texture = ExtResource("2")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
 
-[node name="Margin" type="MarginContainer" parent="Center/Panel"]
+[node name="Margin" type="MarginContainer" parent="Center/Card"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 22
+
+[node name="VBox" type="VBoxContainer" parent="Center/Card/Margin"]
 layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 20
+theme_override_constants/separation = 14
 
-[node name="VBox" type="VBoxContainer" parent="Center/Panel/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="Title" type="Label" parent="Center/Panel/Margin/VBox"]
+[node name="Title" type="Label" parent="Center/Card/Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Регистрация"
+theme_override_font_sizes/font_size = 24
+text = "Регистрация Гильдмастера"
 horizontal_alignment = 1
 
-[node name="Row" type="HBoxContainer" parent="Center/Panel/Margin/VBox"]
+[node name="Subtitle" type="Label" parent="Center/Card/Margin/VBox"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.78, 0.72, 0.62, 1)
+text = "Представьтесь королевству"
+horizontal_alignment = 1
 
-[node name="NameCol" type="VBoxContainer" parent="Center/Panel/Margin/VBox/Row"]
+[node name="Body" type="HBoxContainer" parent="Center/Card/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 28
+
+[node name="PreviewCol" type="VBoxContainer" parent="Center/Card/Margin/VBox/Body"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PreviewFrame" type="PanelContainer" parent="Center/Card/Margin/VBox/Body/PreviewCol"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 220)
+layout_mode = 2
+
+[node name="PreviewHost" type="Control" parent="Center/Card/Margin/VBox/Body/PreviewCol/PreviewFrame"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(184, 200)
+
+[node name="PreviewSprite" type="AnimatedSprite2D" parent="Center/Card/Margin/VBox/Body/PreviewCol/PreviewFrame/PreviewHost"]
+unique_name_in_owner = true
+position = Vector2(92, 130)
+scale = Vector2(2.4, 2.4)
+
+[node name="PreviewLabel" type="Label" parent="Center/Card/Margin/VBox/Body/PreviewCol"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+text = "Воин"
+
+[node name="FieldsCol" type="VBoxContainer" parent="Center/Card/Margin/VBox/Body"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 6
+size_flags_vertical = 3
+theme_override_constants/separation = 12
 
-[node name="LblName" type="Label" parent="Center/Panel/Margin/VBox/Row/NameCol"]
+[node name="LblName" type="Label" parent="Center/Card/Margin/VBox/Body/FieldsCol"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Имя"
 
-[node name="HeroName" type="LineEdit" parent="Center/Panel/Margin/VBox/Row/NameCol"]
+[node name="HeroName" type="LineEdit" parent="Center/Card/Margin/VBox/Body/FieldsCol"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-placeholder_text = "…"
 
-[node name="ClassCol" type="VBoxContainer" parent="Center/Panel/Margin/VBox/Row"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 6
-
-[node name="LblClass" type="Label" parent="Center/Panel/Margin/VBox/Row/ClassCol"]
+[node name="LblClass" type="Label" parent="Center/Card/Margin/VBox/Body/FieldsCol"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Класс"
 
-[node name="HeroClass" type="OptionButton" parent="Center/Panel/Margin/VBox/Row/ClassCol"]
+[node name="HeroClass" type="OptionButton" parent="Center/Card/Margin/VBox/Body/FieldsCol"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="ErrorLabel" type="Label" parent="Center/Panel/Margin/VBox"]
+[node name="Spacer" type="Control" parent="Center/Card/Margin/VBox/Body/FieldsCol"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ErrorLabel" type="Label" parent="Center/Card/Margin/VBox/Body/FieldsCol"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.25, 0.2, 1)
+theme_override_colors/font_color = Color(0.9, 0.35, 0.28, 1)
 autowrap_mode = 3
 
-[node name="BtnConfirm" type="Button" parent="Center/Panel/Margin/VBox"]
+[node name="BtnConfirm" type="Button" parent="Center/Card/Margin/VBox/Body/FieldsCol"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "Подтвердить"
