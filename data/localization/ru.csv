@@ -1,0 +1,42 @@
+keys,ru
+menu.new_game,Новая игра
+menu.load,Загрузить
+menu.settings,Настройки
+menu.credits,Авторы
+menu.exit,Выход
+menu.back,Назад
+menu.apply,Применить
+menu.defaults,По умолчанию
+menu.delete,Удалить
+menu.cancel,Отмена
+menu.confirm,Подтвердить
+menu.not_available,Недоступно
+menu.ok,Понятно
+menu.new_game_popup,"Создание новой гильдии будет доступно после подключения следующего этапа."
+menu.load_campaign_popup,"Загрузка кампании станет доступна после подключения игрового экрана."
+menu.skip_splash,"Нажмите любую клавишу, чтобы пропустить"
+splash.godot,СОЗДАНО НА GODOT ENGINE
+splash.ams,ИГРА ОТ AMS
+splash.game,ХРОНИКИ НАЧИНАЮТСЯ
+save.slot,Слот %d
+save.empty,Пусто
+save.available,Сохранение доступно
+save.incompatible,Несовместимая версия
+save.corrupted,Повреждённое сохранение
+save.delete_title,Удалить сохранение из слота %d?
+save.delete_warning,Это действие нельзя отменить.
+save.saved_at,Дата: %s
+save.version,Версия: %s
+save.no_actions,Нет действий
+settings.audio,Звук
+settings.video,Экран
+settings.language,Язык
+settings.ui_scale,Масштаб интерфейса
+settings.master_volume,Общая громкость
+settings.music_volume,Музыка
+settings.sfx_volume,Эффекты
+settings.fullscreen,Полноэкранный режим
+settings.windowed,Оконный режим
+settings.resolution,Разрешение
+settings.language_ru,Русский
+credits.title,Авторы
