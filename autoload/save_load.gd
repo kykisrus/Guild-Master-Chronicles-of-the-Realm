@@ -1,8 +1,8 @@
 extends Node
 
 const SLOT_COUNT := 3
-## Future campaign saves must include this field. Legacy slots without it are incompatible.
-const CURRENT_SAVE_VERSION := 2
+## Stage 3 campaign schema.
+const CURRENT_SAVE_VERSION := 1
 
 
 enum SlotStatus {
@@ -43,6 +43,9 @@ func get_slot_status(slot: int) -> SlotStatus:
 	if not data.has("save_version"):
 		return SlotStatus.INCOMPATIBLE
 	if int(data.get("save_version", -1)) != CURRENT_SAVE_VERSION:
+		return SlotStatus.INCOMPATIBLE
+	# Stage 3 campaign must have guild block
+	if not data.has("guild") and not data.has("guild_name"):
 		return SlotStatus.INCOMPATIBLE
 	return SlotStatus.AVAILABLE
 
@@ -89,22 +92,21 @@ func latest_save_slot() -> int:
 	return latest_slot
 
 
-func save_game(slot: int) -> String:
+func save_campaign(slot: int) -> String:
 	if slot < 1 or slot > SLOT_COUNT:
 		return "Неверный слот."
-	var data: Dictionary = GameState.to_save_dict()
-	data["saved_at"] = Time.get_datetime_string_from_system()
+	var data: Dictionary = CampaignState.to_save_dict()
 	data["save_version"] = CURRENT_SAVE_VERSION
+	data["saved_at"] = Time.get_datetime_string_from_system()
 	var json := JSON.stringify(data, "\t")
 	var f := FileAccess.open(slot_path(slot), FileAccess.WRITE)
 	if f == null:
 		return "Не удалось открыть файл сохранения."
 	f.store_string(json)
-	GameState.add_notification("Игра сохранена в слот %d." % slot)
 	return ""
 
 
-func load_game(slot: int) -> String:
+func load_campaign(slot: int) -> String:
 	if slot < 1 or slot > SLOT_COUNT:
 		return "Неверный слот."
 	match get_slot_status(slot):
@@ -122,9 +124,17 @@ func load_game(slot: int) -> String:
 	var parsed: Variant = JSON.parse_string(f.get_as_text())
 	if typeof(parsed) != TYPE_DICTIONARY:
 		return "Повреждённый файл сохранения."
-	GameState.load_from_dict(parsed)
-	GameState.add_notification("Загружен слот %d." % slot)
+	CampaignState.load_from_dict(parsed)
 	return ""
+
+
+## Legacy wrappers (Stage 1 prototype) — prefer save_campaign / load_campaign.
+func save_game(slot: int) -> String:
+	return save_campaign(slot)
+
+
+func load_game(slot: int) -> String:
+	return load_campaign(slot)
 
 
 func delete_save(slot: int) -> String:
@@ -150,8 +160,16 @@ func slot_info(slot: int) -> String:
 		_:
 			pass
 	var d := slot_metadata(slot)
-	return "Слот %d — %s | %s" % [
-		slot,
-		str(d.get("guild_name", "?")),
-		str(d.get("saved_at", "?")),
-	]
+	var gname := str(d.get("guild_name", ""))
+	if gname.is_empty() and typeof(d.get("guild", null)) == TYPE_DICTIONARY:
+		gname = str(d["guild"].get("name", "?"))
+	if gname.is_empty():
+		gname = "?"
+	return "Слот %d — %s | %s" % [slot, gname, str(d.get("saved_at", "?"))]
+
+
+func first_writable_slot() -> int:
+	for slot in range(1, SLOT_COUNT + 1):
+		if get_slot_status(slot) == SlotStatus.EMPTY:
+			return slot
+	return 1
