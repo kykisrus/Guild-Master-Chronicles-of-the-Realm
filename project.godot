@@ -6,13 +6,14 @@ config_version=5
 [application]
 
 config/name="Guild Master: Chronicles of the Realm"
-config/description="Guild management RPG prototype"
-run/main_scene="res://scenes/ui/intro_splash.tscn"
+config/description="Guild management RPG — Tiny UI foundation"
+run/main_scene="res://scenes/boot/intro_splash.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
+Localization="*res://autoload/localization.gd"
 Settings="*res://autoload/settings.gd"
 GameState="*res://autoload/game_state.gd"
 TimeSystem="*res://autoload/time_system.gd"
@@ -25,6 +26,10 @@ window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[internationalization]
+
+locale/locale_filter_mode=0
 
 [rendering]
 
