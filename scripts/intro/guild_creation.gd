@@ -2,6 +2,7 @@ extends Control
 ## Guild naming + palette preview + found confirm.
 
 const HUB_SCENE := "res://scenes/guild_hub/guild_hub.tscn"
+const GM_FRAMES := "res://resources/sprite_frames/characters/guildmaster.tres"
 const PALETTES := ["blue", "red", "black", "yellow", "purple"]
 
 @onready var title: Label = %Title
@@ -67,11 +68,20 @@ func _apply_preview() -> void:
 	var barracks_path := "res://assets/tiny_swords/buildings/%s/Barracks.png" % _palette
 	if ResourceLoader.exists(barracks_path):
 		preview_barracks.texture = load(barracks_path) as Texture2D
-	var unit_path := "res://resources/sprite_frames/tiny_swords/unit_warrior_%s.tres" % _palette
-	if ResourceLoader.exists(unit_path):
-		var frames := load(unit_path) as SpriteFrames
-		if frames and frames.has_animation(&"idle") and frames.get_frame_count(&"idle") > 0:
-			preview_unit.texture = frames.get_frame_texture(&"idle", 0)
+	# Guildmaster art is fixed; palette only recolors the hall.
+	preview_unit.texture = _guildmaster_preview_texture()
+
+
+func _guildmaster_preview_texture() -> Texture2D:
+	if not ResourceLoader.exists(GM_FRAMES):
+		return null
+	var frames := load(GM_FRAMES) as SpriteFrames
+	if frames == null:
+		return null
+	for anim in [&"idle_se", &"idle", &"run"]:
+		if frames.has_animation(anim) and frames.get_frame_count(anim) > 0:
+			return frames.get_frame_texture(anim, 0)
+	return null
 
 
 func _on_found_pressed() -> void:
