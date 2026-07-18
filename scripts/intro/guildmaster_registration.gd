@@ -22,10 +22,12 @@ const CLASSES := [
 @onready var preview_label: Label = %PreviewLabel
 @onready var preview_frame: PanelContainer = %PreviewFrame
 @onready var preview_host: Control = %PreviewHost
+@onready var card: NinePatchRect = %Card
 
 
 func _ready() -> void:
 	theme = TinyThemeFactory.build()
+	_apply_tiny_swords_card()
 	_style_preview_frame()
 	title.text = tr("gm_registration.title")
 	subtitle.text = tr("gm_registration.subtitle")
@@ -45,6 +47,22 @@ func _ready() -> void:
 	preview_host.resized.connect(_center_preview)
 	call_deferred("_center_preview")
 	call_deferred("_focus_name")
+
+
+func _apply_tiny_swords_card() -> void:
+	# Prefer Tiny Swords special paper as the card texture if NinePatch is used.
+	if card != null and ResourceLoader.exists(TinySwordsUi.PAPER_SPECIAL):
+		card.texture = load(TinySwordsUi.PAPER_SPECIAL) as Texture2D
+		card.patch_margin_left = 106
+		card.patch_margin_top = 106
+		card.patch_margin_right = 106
+		card.patch_margin_bottom = 106
+	btn_confirm.add_theme_stylebox_override("normal", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 14))
+	btn_confirm.add_theme_stylebox_override("hover", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE, 14))
+	btn_confirm.add_theme_stylebox_override("pressed", TinySwordsUi.style_from_sheet(TinySwordsUi.BTN_BLUE_PRESSED, 14))
+	btn_confirm.add_theme_color_override("font_color", Color(0.95, 0.95, 0.92, 1.0))
+	btn_confirm.add_theme_color_override("font_hover_color", Color(1, 1, 1, 1))
+	btn_confirm.add_theme_color_override("font_pressed_color", Color(0.9, 0.85, 0.7, 1))
 
 
 func _focus_name() -> void:

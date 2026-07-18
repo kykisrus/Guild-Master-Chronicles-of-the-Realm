@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/intro/guildmaster_registration.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/tiny_gui/panels/Split/Popup_Window_Brown_16x16.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/tiny_swords/ui/papers/SpecialPaper.png" id="2"]
 
 [node name="GuildmasterRegistration" type="Control"]
 layout_mode = 3
@@ -44,10 +44,10 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(720, 360)
 layout_mode = 2
 texture = ExtResource("2")
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
+patch_margin_left = 106
+patch_margin_top = 106
+patch_margin_right = 106
+patch_margin_bottom = 106
 
 [node name="Margin" type="MarginContainer" parent="Center/Card"]
 layout_mode = 1

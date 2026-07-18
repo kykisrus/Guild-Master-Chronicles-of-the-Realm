@@ -37,9 +37,9 @@
 ## Игровые Tiny-ассеты (Этап 2)
 
 - **Tiny Swords (Free Pack)** — автор **Pixel Frog**  
-  Назначение: Guild Hub, внешний мир, юниты, здания, terrain, FX.  
+  Назначение: Guild Hub, внешний мир, юниты, здания, terrain, FX, **UI Elements** (papers, buttons, avatars).  
   Путь: `res://assets/tiny_swords/`  
-  Примечание: в поставке пакета отдельный LICENSE-файл отсутствовал; использовать согласно условиям покупки на itch.io.
+  UI: `res://assets/tiny_swords/ui/`
 
 - **Tiny Neighbours Vol.1** — автор **Vryell** (@Vryell)  
   Назначение: NPC, эмоции, интерьерные персонажи.  

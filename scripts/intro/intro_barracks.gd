@@ -6,8 +6,8 @@ const GM_SCENE := "res://scenes/characters/guildmaster.tscn"
 const DOOR_SCENE := "res://scenes/assets/kings_and_pigs/basic_door.tscn"
 const DIALOGUE_SCENE := "res://scenes/ui/dialogue/dialogue_box.tscn"
 const DIALOGUE_DATA := "res://data/intro/thief_dialogue.json"
-## Human Tiny Neighbours NPC (not Kap Pig — that was only a temporary interior placeholder).
-const THIEF_FRAMES := "res://resources/sprite_frames/tiny_neighbours/npc_07.tres"
+## Tiny Swords black Pawn — temporary stand-in until custom Проныра art (see character design doc).
+const THIEF_FRAMES := "res://resources/sprite_frames/tiny_swords/unit_pawn_black.tres"
 const ROOM_W := 960.0
 const ROOM_H := 540.0
 
@@ -64,14 +64,16 @@ func _build_room() -> void:
 	_thief.name = "ThiefPronyra"
 	if ResourceLoader.exists(THIEF_FRAMES):
 		_thief.sprite_frames = load(THIEF_FRAMES) as SpriteFrames
-		if _thief.sprite_frames.has_animation(&"idle"):
+		if _thief.sprite_frames.has_animation(&"idle_knife"):
+			_thief.play(&"idle_knife")
+		elif _thief.sprite_frames.has_animation(&"idle"):
 			_thief.play(&"idle")
-		elif _thief.sprite_frames.has_animation(&"walk"):
-			_thief.play(&"walk")
+		elif _thief.sprite_frames.has_animation(&"run"):
+			_thief.play(&"run")
 	_thief.position = Vector2(620, 360)
 	_thief.flip_h = true
-	# Neighbours sprites are ~32x52; scale up for Kap interior camera.
-	_thief.scale = Vector2(2.5, 2.5)
+	# Same pack/scale family as Guildmaster (Tiny Swords).
+	_thief.scale = Vector2(1.0, 1.0)
 	world.add_child(_thief)
 
 

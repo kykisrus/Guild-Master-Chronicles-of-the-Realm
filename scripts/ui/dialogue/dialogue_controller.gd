@@ -1,10 +1,12 @@
 extends CanvasLayer
-## Reusable dialogue UI: speaker, text, choices, typewriter skip.
+## Reusable dialogue UI built from Tiny Swords papers/buttons/avatars.
 
 signal choice_selected(choice_id: String)
 signal dialogue_finished
 
 @onready var panel: PanelContainer = %Panel
+@onready var portrait: TextureRect = %Portrait
+@onready var portrait_frame: PanelContainer = %PortraitFrame
 @onready var speaker_label: Label = %SpeakerLabel
 @onready var body_label: RichTextLabel = %BodyLabel
 @onready var choices_box: VBoxContainer = %ChoicesBox
@@ -14,17 +16,25 @@ var _full_text: String = ""
 var _typing := false
 var _type_tween: Tween
 var _awaiting_continue := false
+var _portrait_by_speaker: Dictionary = {}
 
 
 func _ready() -> void:
 	visible = false
-	var theme := TinyThemeFactory.build()
-	panel.theme = theme
-	# Theme must be on a Control ancestor so dynamic choice buttons inherit it.
 	var root := get_node_or_null("Root") as Control
 	if root != null:
-		root.theme = theme
-	continue_hint.text = tr("intro.dialogue_continue")
+		TinySwordsUi.apply_dialogue_theme(root)
+	panel.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.PAPER_SPECIAL, 8))
+	portrait_frame.add_theme_stylebox_override("panel", TinySwordsUi.style_from_sheet(TinySwordsUi.WOOD_TABLE, 8))
+	continue_hint.text = tr("intro.dialogue_continue").replace("…", "")
+	_portrait_by_speaker = {
+		"Проныра": TinySwordsUi.AVATAR_THIEF,
+		"Гильдмастер": TinySwordsUi.AVATAR_GM,
+	}
+
+
+func set_speaker_portrait(speaker: String, texture_path: String) -> void:
+	_portrait_by_speaker[speaker] = texture_path
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -43,6 +53,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func show_line(speaker: String, text: String, typewriter := true) -> void:
 	visible = true
 	speaker_label.text = speaker
+	_apply_portrait(speaker)
 	_clear_choices()
 	_full_text = text
 	continue_hint.visible = true
@@ -68,10 +79,8 @@ func show_choices(choices: Array) -> void:
 		var btn := Button.new()
 		var label := str(c.get("text", ""))
 		var seen := bool(c.get("seen", false))
-		# Avoid Unicode checkmarks — Pix Cyrillic has no U+2713 (shows as "2713" tofu).
 		if seen:
-			btn.modulate = Color(0.72, 0.78, 0.72, 1.0)
-			btn.disabled = false
+			btn.modulate = Color(0.78, 0.82, 0.75, 1.0)
 		btn.text = label
 		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var cid := str(c.get("id", ""))
@@ -84,6 +93,17 @@ func hide_dialogue() -> void:
 	_clear_choices()
 	_typing = false
 	_awaiting_continue = false
+
+
+func _apply_portrait(speaker: String) -> void:
+	var path := str(_portrait_by_speaker.get(speaker, TinySwordsUi.AVATAR_THIEF))
+	var tex := TinySwordsUi.load_avatar(path)
+	if tex != null:
+		portrait.texture = tex
+		portrait.visible = true
+		portrait_frame.visible = true
+	else:
+		portrait_frame.visible = false
 
 
 func _start_typewriter(text: String) -> void:
