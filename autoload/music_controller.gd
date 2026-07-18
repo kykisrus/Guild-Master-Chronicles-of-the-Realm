@@ -13,18 +13,25 @@ var _menu_context: bool = false
 func _ready() -> void:
 	_player = AudioStreamPlayer.new()
 	_player.name = "PersistentMusic"
-	_player.volume_db = -8.0
+	_player.bus = "Music"
+	_player.volume_db = 0.0
 	add_child(_player)
 	_player.finished.connect(_on_track_finished)
-	if Settings != null:
-		set_music_volume(Settings.music_volume)
+	set_music_bus("Music")
 
 
-func set_music_volume(linear: float) -> void:
+func set_music_bus(bus_name: String) -> void:
 	if _player == null:
 		return
-	var v := clampf(linear, 0.0, 1.0)
-	_player.volume_db = linear_to_db(v) if v > 0.001 else -80.0
+	if AudioServer.get_bus_index(bus_name) >= 0:
+		_player.bus = bus_name
+
+
+## Kept for compatibility; volume is controlled by the Music bus in Settings.
+func set_music_volume(_linear: float) -> void:
+	if _player == null:
+		return
+	_player.volume_db = 0.0
 
 
 func play_intro(restart: bool = false) -> void:
